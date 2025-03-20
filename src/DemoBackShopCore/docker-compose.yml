@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: demo_back_shop_core_db
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password123!
+      - MSSQL_PID=Developer
