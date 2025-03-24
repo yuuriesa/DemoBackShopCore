@@ -8,5 +8,9 @@ namespace DemoBackShopCore.Utils
         public const string DateOfBirthError = "You cannot put the date with the day after today.";
         public const string CustomerFieldsAreInvalidError = "FirstName, Lastname or DateOfBirth fields are invalid, check the values available.";
         public const string EmailFieldIsNotAValid = "The Email field is not a valid e-mail address.";
+        public const string FirstNameIsRequired = "FirstName Is Required";
+        public const string LastNameIsRequired = "LastName Is Required";
+        public const string EmailAddressIsRequired = "EmailAddress Is Required";
+        public const string DateOfBirthIsRequired = "DateOfBirth Is Required";
     }
 }
