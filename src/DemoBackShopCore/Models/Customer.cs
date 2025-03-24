@@ -1,7 +1,12 @@
+using DemoBackShopCore.Utils;
+
 namespace DemoBackShopCore.Models
 {
     public class Customer
     {
+        public static int MAXIMUM_CHARACTERS_FIRST_NAME = 40;
+        public static int MAXIMUM_CHARACTERS_LAST_NAME = 40;
+
         //private properties
         private string _firstName { get; set; }
         private string _lastName { get; set; }
@@ -60,16 +65,16 @@ namespace DemoBackShopCore.Models
         {
             if (customerId < 1)
             {
-                throw new ArgumentOutOfRangeException("customerId must be greater than zero");
+                throw new ArgumentOutOfRangeException(DomainResponseMessages.CustomerCustomerIdMustBeGreaterThanZeroError);
             }
             CustomerId = customerId;
         }
 
         private void SetFirstName(string firstName)
         {
-            if (firstName.Length > 40)
+            if (firstName.Length > MAXIMUM_CHARACTERS_FIRST_NAME)
             {
-                throw new ArgumentOutOfRangeException("Must have a maximum of 40 characters");
+                throw new ArgumentOutOfRangeException(DomainResponseMessages.MaximumOf40CharactersError);
             }
 
             _firstName = firstName;
@@ -77,9 +82,9 @@ namespace DemoBackShopCore.Models
 
         private void SetLastName(string lastName)
         {
-            if (lastName.Length > 40)
+            if (lastName.Length > MAXIMUM_CHARACTERS_LAST_NAME)
             {
-                throw new ArgumentOutOfRangeException("Must have a maximum of 40 characters");
+                throw new ArgumentOutOfRangeException(DomainResponseMessages.MaximumOf40CharactersError);
             }
 
             _lastName = lastName;
@@ -96,7 +101,7 @@ namespace DemoBackShopCore.Models
 
             if (dateOfBirth.ToUniversalTime().Date > dateNow.Date)
             {
-                throw new ArgumentOutOfRangeException("You cannot put the date with the day after today.");
+                throw new ArgumentOutOfRangeException(DomainResponseMessages.DateOfBirthError);
             }
 
             _dateOfBirth = DateOnly.FromDateTime(dateTime: dateOfBirth);
@@ -108,9 +113,9 @@ namespace DemoBackShopCore.Models
             
             var dateNow = DateTime.Now;
             
-            if (firstName.Length > 40 || lastName.Length > 40 || dateOfBirth.ToUniversalTime().Date > dateNow.Date)
+            if (firstName.Length > MAXIMUM_CHARACTERS_FIRST_NAME || lastName.Length > MAXIMUM_CHARACTERS_LAST_NAME || dateOfBirth.ToUniversalTime().Date > dateNow.Date)
             {
-                throw new ArgumentOutOfRangeException("FirstName or Lastname or DateOfBirth fields are invalid, check the values available.");
+                throw new ArgumentOutOfRangeException(DomainResponseMessages.CustomerFieldsAreInvalidError);
             }
 
             _isValid = true;
