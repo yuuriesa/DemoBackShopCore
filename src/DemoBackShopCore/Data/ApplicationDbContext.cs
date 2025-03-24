@@ -20,7 +20,34 @@ namespace DemoBackShopCore.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Customer>(entity => 
+            {
+                entity.HasKey(c => c.CustomerId);
+
+                entity.Property(c => c.FirstName)
+                .IsRequired()
+                .HasMaxLength(40)
+                .HasColumnName("FirstName");
+
+                entity.Property(c => c.LastName)
+                .IsRequired()
+                .HasMaxLength(40)
+                .HasColumnName("LastName");
+
+                entity.HasIndex(c => c.EmailAddress)
+                .IsUnique();
+
+                entity.Property(c => c.EmailAddress)
+                .IsRequired()
+                .HasColumnName("EmailAddress");
+
+                entity.Property(c => c.DateOfBirth)
+                .IsRequired()
+                .HasColumnName("DateOfBirth")
+                .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
+
+                //entity.Ignore("_isValid");
+            });
         }
     }
 }
