@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using DemoBackShopCore.ConstantsModelsRules;
+using DemoBackShopCore.Utils;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Utils;
 

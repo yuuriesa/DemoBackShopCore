@@ -1,4 +1,4 @@
-namespace DemoBackShopCore.ConstantsModelsRules
+namespace DemoBackShopCore.Utils
 {
     public static class CustomerConstantsRules
     {

@@ -1,4 +1,4 @@
-using DemoBackShopCore.ConstantsModelsRules;
+using DemoBackShopCore.Utils;
 using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.Models
