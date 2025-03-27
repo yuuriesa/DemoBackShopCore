@@ -1,6 +1,6 @@
 namespace DemoBackShopCore.Repository
 {
-    public class RepositoryBase<TEntity> where TEntity : class, IRepositoryBase<TEntity>
+    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
     {
 
     }
