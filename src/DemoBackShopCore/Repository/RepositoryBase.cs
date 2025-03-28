@@ -15,39 +15,41 @@ namespace DemoBackShopCore.Repository
             _dbSetEntity = _dbContext.Set<TEntity>();
         }
 
-        public TEntity Add(TEntity entity)
+        public void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            _dbSetEntity.Add(entity: entity);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            _dbSetEntity.AddRange(entities: entities);
         }
 
         public IQueryable<TEntity> GetAll(PaginationFilter paginationFilter)
         {
-            throw new NotImplementedException();
+            return _dbSetEntity
+                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                    .Take(paginationFilter.PageSize);
         }
 
         public TEntity GetById(int id)
         {
-            throw new NotImplementedException();
+            return _dbSetEntity.Find(keyValues: id);
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            _dbSetEntity.Remove(entity: _dbSetEntity.Find(keyValues: id));
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _dbContext.SaveChanges();
         }
 
         public void Update(int id, TEntity entity)
         {
-            throw new NotImplementedException();
+            _dbSetEntity.Update(entity: entity);
         }
     }
 }

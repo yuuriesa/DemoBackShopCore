@@ -6,7 +6,7 @@ namespace DemoBackShopCore.Repository
     {
         public IQueryable<TEntity> GetAll(PaginationFilter paginationFilter);
         public TEntity GetById(int id);
-        public TEntity Add(TEntity entity);
+        public void Add(TEntity entity);
         public void AddRange(IEnumerable<TEntity> entities);
         public void Update(int id, TEntity entity);
         public void Remove(int id);
