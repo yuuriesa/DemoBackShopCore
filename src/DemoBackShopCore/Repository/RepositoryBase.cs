@@ -1,4 +1,5 @@
 using DemoBackShopCore.Data;
+using DemoBackShopCore.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Repository
@@ -24,7 +25,7 @@ namespace DemoBackShopCore.Repository
             throw new NotImplementedException();
         }
 
-        public IQueryable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll(PaginationFilter paginationFilter)
         {
             throw new NotImplementedException();
         }
