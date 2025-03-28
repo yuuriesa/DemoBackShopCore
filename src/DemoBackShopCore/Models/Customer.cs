@@ -1,8 +1,8 @@
 using DemoBackShopCore.Utils;
-using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.Models
 {
+    //ajeitar os retornos dos métodos que estão com throw
     public class Customer
     {
         //private properties

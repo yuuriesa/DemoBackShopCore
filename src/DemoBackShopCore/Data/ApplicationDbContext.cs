@@ -45,8 +45,6 @@ namespace DemoBackShopCore.Data
                 .IsRequired()
                 .HasColumnName("DateOfBirth")
                 .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
-
-                //entity.Ignore("_isValid");
             });
         }
     }
