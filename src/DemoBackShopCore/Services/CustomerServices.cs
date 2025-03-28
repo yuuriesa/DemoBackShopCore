@@ -3,7 +3,7 @@ using DemoBackShopCore.Repository;
 
 namespace DemoBackShopCore.Services
 {
-    public class CustomerServices : RepositoryBase<Customer>, ICustomerServices
+    public class CustomerServices : ICustomerServices
     {
         
     }

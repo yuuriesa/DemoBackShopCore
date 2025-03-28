@@ -2,7 +2,7 @@ using DemoBackShopCore.Models;
 
 namespace DemoBackShopCore.Repository
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
     {
         
     }
