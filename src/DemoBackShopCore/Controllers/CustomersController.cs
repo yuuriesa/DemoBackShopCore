@@ -58,8 +58,8 @@ namespace DemoBackShopCore.Controllers
 
             _dbContext.SaveChanges();
 
-            //por o CreatedAtAction aqui, depois de por o método do getbyid
-            return Created("", customer);
+            //por o CreatedAtAction aqui, depois de por o método do getbyid e arrumar os retornos
+            return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = customer.Data.CustomerId}, value: customer);
         }
     }
 }
