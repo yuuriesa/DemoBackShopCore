@@ -50,6 +50,7 @@ namespace DemoBackShopCore.Models
         public static Customer SetExistingInfo(int customerId, string firstName, string lastName, string emailAddress, DateOnly dateOfBirth)
         {
             var customer = new Customer(customerId: customerId, firstName: firstName, lastName: lastName, emailAddress: emailAddress, dateOfBirth: dateOfBirth);
+            customer.SetCustomerId(customerId: customerId);
             return customer;
         }
 

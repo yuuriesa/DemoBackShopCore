@@ -1,4 +1,6 @@
+using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
+using DemoBackShopCore.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoBackShopCore.Controllers
@@ -14,9 +16,17 @@ namespace DemoBackShopCore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok();
+            if (pageNumber < 0 || pageSize < 0) return BadRequest(DomainResponseMessages.CustomerPaginationError);
+
+            PaginationFilter paginationFilter = new PaginationFilter(pageNumber: pageNumber, pageSize: pageSize);
+
+            IQueryable<Customer> customers = _services.GetAll(paginationFilter: paginationFilter);
+
+            if (customers.Count() == 0) return NoContent();
+
+            return Ok(customers);
         }
     }
 }
