@@ -57,5 +57,19 @@ namespace DemoBackShopCore.Services
         {
             throw new NotImplementedException();
         }
+
+        public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer)
+        {
+            CustomerResponseDTO customerResponse = new CustomerResponseDTO
+            {
+                CustomerId = customer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                EmailAddress = customer.EmailAddress,
+                DateOfBirth = customer.DateOfBirth
+            };
+
+            return customerResponse;
+        }
     }
 }

@@ -30,7 +30,16 @@ namespace DemoBackShopCore.Controllers
 
             if (customers.Count() == 0) return NoContent();
 
-            return Ok(customers);
+            List<CustomerResponseDTO> customersResponses = new List<CustomerResponseDTO>();
+
+            foreach (var customer in customers)
+            {
+                CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: customer);
+                customersResponses.Add(item: customerResponse);
+            }
+
+
+            return Ok(customersResponses);
         }
 
         [HttpGet("{id}")]
@@ -43,7 +52,9 @@ namespace DemoBackShopCore.Controllers
                 return NotFound(DomainResponseMessages.CustomerNotFoundMessageError);
             }
 
-            return Ok(customer);
+            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: customer);
+
+            return Ok(customerResponse);
         }
 
         [HttpPost]
@@ -57,9 +68,10 @@ namespace DemoBackShopCore.Controllers
             }
 
             _dbContext.SaveChanges();
+            
+            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: customer.Data);
 
-            //por o CreatedAtAction aqui, depois de por o método do getbyid e arrumar os retornos
-            return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = customer.Data.CustomerId}, value: customer);
+            return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = customerResponse.CustomerId }, value: customerResponse);
         }
     }
 }
