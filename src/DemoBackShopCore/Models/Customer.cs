@@ -26,11 +26,11 @@ namespace DemoBackShopCore.Models
         }
         private Customer(int customerId, string firstName, string lastName, string emailAddress, DateOnly dateOfBirth)
         {
-            SetCustomerId(customerId: customerId);
-            SetFirstName(firstName: firstName);
-            SetLastName(lastName: lastName);
-            SetEmailAddress(emailAddress: emailAddress);
-            SetDateOfBirth(dateOfBirth: dateOfBirth.ToDateTime(TimeOnly.MinValue));
+            CustomerId = customerId;
+            _firstName = firstName;
+            _lastName = lastName;
+            _emailAddress = emailAddress;
+            _dateOfBirth = dateOfBirth;
             Validate(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth.ToDateTime(TimeOnly.MinValue));
         }
 
