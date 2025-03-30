@@ -27,23 +27,27 @@ namespace DemoBackShopCore.Data
                 entity.Property(c => c.FirstName)
                 .IsRequired()
                 .HasMaxLength(40)
-                .HasColumnName("FirstName");
+                .HasColumnName("FirstName")
+                .HasField("_firstName");
 
                 entity.Property(c => c.LastName)
                 .IsRequired()
                 .HasMaxLength(40)
-                .HasColumnName("LastName");
+                .HasColumnName("LastName")
+                .HasField("_lastName");
 
                 entity.HasIndex(c => c.EmailAddress)
                 .IsUnique();
 
                 entity.Property(c => c.EmailAddress)
                 .IsRequired()
-                .HasColumnName("EmailAddress");
+                .HasColumnName("EmailAddress")
+                .HasField("_emailAddress");
 
                 entity.Property(c => c.DateOfBirth)
                 .IsRequired()
                 .HasColumnName("DateOfBirth")
+                .HasField("_dateOfBirth")
                 .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
             });
         }

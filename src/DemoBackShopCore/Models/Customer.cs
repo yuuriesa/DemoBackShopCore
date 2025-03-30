@@ -6,10 +6,10 @@ namespace DemoBackShopCore.Models
     public class Customer
     {
         //private properties
-        private string _firstName { get; set; }
-        private string _lastName { get; set; }
-        private string _emailAddress { get; set; }
-        private DateOnly _dateOfBirth { get; set; }
+        private string _firstName;
+        private string _lastName;
+        private string _emailAddress;
+        private DateOnly _dateOfBirth;
         private bool _isValid { get; set; }
 
         //public properties
