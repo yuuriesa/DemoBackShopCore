@@ -14,9 +14,23 @@ namespace DemoBackShopCore.Services
             _repository = repository;
         }
 
-        public void Add(CustomerRequestDTO customer)
+        public Customer Add(CustomerRequestDTO customerRequest)
         {
-            throw new NotImplementedException();
+            Customer customer = Customer.RegisterNew
+                                (
+                                    firstName: customerRequest.FirstName,
+                                    lastName: customerRequest.LastName,
+                                    emailAddress: customerRequest.EmailAddress,
+                                    dateOfBirth: customerRequest.DateOfBirth
+                                );
+            
+            // if (!customer.IsValid())
+            // {
+            //     return
+            // }
+
+            _repository.Add(entity: customer);
+            return GetById(id: customer.CustomerId);
         }
 
         public void AddRange(IEnumerable<CustomerRequestDTO> customers)
@@ -31,7 +45,7 @@ namespace DemoBackShopCore.Services
 
         public Customer GetById(int id)
         {
-            throw new NotImplementedException();
+            return _repository.GetById(id: id);
         }
 
         public void Remove(int id)

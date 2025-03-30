@@ -1,3 +1,5 @@
+using DemoBackShopCore.Data;
+using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
 using DemoBackShopCore.Utils;
@@ -9,9 +11,11 @@ namespace DemoBackShopCore.Controllers
     [Route("api/Customers")]
     public class CustomersController : ControllerBase
     {
+        private readonly ApplicationDbContext _dbContext;
         private readonly ICustomerServices _services;
-        public CustomersController(ICustomerServices services)
+        public CustomersController(ApplicationDbContext dbContext, ICustomerServices services)
         {
+            _dbContext = dbContext;
             _services = services;
         }
 
@@ -27,6 +31,16 @@ namespace DemoBackShopCore.Controllers
             if (customers.Count() == 0) return NoContent();
 
             return Ok(customers);
+        }
+
+        [HttpPost]
+        public IActionResult Add(CustomerRequestDTO customerRequest)
+        {
+            Customer customer = _services.Add(customerRequest: customerRequest);
+
+            _dbContext.SaveChanges();
+
+            return Created("", customer);
         }
     }
 }

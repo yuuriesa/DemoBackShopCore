@@ -18,6 +18,6 @@ namespace DemoBackShopCore.DTOs
         public string EmailAddress { get; set; }
         [Required(ErrorMessage = DomainResponseMessages.DateOfBirthIsRequired)]
         [DataType(DataType.Date)]
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }
