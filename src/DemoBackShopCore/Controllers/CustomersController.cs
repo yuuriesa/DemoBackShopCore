@@ -33,6 +33,19 @@ namespace DemoBackShopCore.Controllers
             return Ok(customers);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            Customer customer = _services.GetById(id: id);
+
+            if (customer == null)
+            {
+                return NotFound(DomainResponseMessages.CustomerNotFoundMessageError);
+            }
+
+            return Ok(customer);
+        }
+
         [HttpPost]
         public IActionResult Add(CustomerRequestDTO customerRequest)
         {
