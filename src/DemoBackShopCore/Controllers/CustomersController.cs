@@ -36,7 +36,12 @@ namespace DemoBackShopCore.Controllers
         [HttpPost]
         public IActionResult Add(CustomerRequestDTO customerRequest)
         {
-            Customer customer = _services.Add(customerRequest: customerRequest);
+            ServiceResult<Customer> customer = _services.Add(customerRequest: customerRequest);
+
+            if (!customer.Success)
+            {
+                return StatusCode(statusCode: customer.StatusCode, value: customer.Message);
+            }
 
             _dbContext.SaveChanges();
 

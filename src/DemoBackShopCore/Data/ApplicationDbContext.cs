@@ -49,6 +49,8 @@ namespace DemoBackShopCore.Data
                 .HasColumnName("DateOfBirth")
                 .HasField("_dateOfBirth")
                 .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
+
+                entity.Ignore(c => c.ErrorMessageIfIsNotValid);
             });
         }
     }

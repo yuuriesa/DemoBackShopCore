@@ -10,7 +10,7 @@ namespace DemoBackShopCore.Models
         private string _lastName;
         private string _emailAddress;
         private DateOnly _dateOfBirth;
-        private bool _isValid { get; set; }
+        private bool _isValid { get; set; } = false;
 
         //public properties
         public int CustomerId { get; private set; }
@@ -18,6 +18,7 @@ namespace DemoBackShopCore.Models
         public string LastName => _lastName;
         public string EmailAddress => _emailAddress;
         public DateOnly DateOfBirth => _dateOfBirth;
+        public string ErrorMessageIfIsNotValid { get; private set; } = string.Empty;
 
         //constructors
         private Customer()
@@ -37,7 +38,7 @@ namespace DemoBackShopCore.Models
         //public methods
         public static Customer RegisterNew(string firstName, string lastName, string emailAddress, DateTime dateOfBirth)
         {
-            var customer = new Customer();
+            Customer customer = new Customer();
             customer.SetFirstName(firstName: firstName);
             customer.SetLastName(lastName: lastName);
             customer.SetEmailAddress(emailAddress: emailAddress);
@@ -49,7 +50,7 @@ namespace DemoBackShopCore.Models
 
         public static Customer SetExistingInfo(int customerId, string firstName, string lastName, string emailAddress, DateOnly dateOfBirth)
         {
-            var customer = new Customer(customerId: customerId, firstName: firstName, lastName: lastName, emailAddress: emailAddress, dateOfBirth: dateOfBirth);
+            Customer customer = new Customer(customerId: customerId, firstName: firstName, lastName: lastName, emailAddress: emailAddress, dateOfBirth: dateOfBirth);
             customer.SetCustomerId(customerId: customerId);
             return customer;
         }
@@ -64,28 +65,18 @@ namespace DemoBackShopCore.Models
         {
             if (customerId < 1)
             {
-                throw new ArgumentOutOfRangeException(DomainResponseMessages.CustomerCustomerIdMustBeGreaterThanZeroError);
+                ErrorMessageIfIsNotValid = DomainResponseMessages.CustomerCustomerIdMustBeGreaterThanZeroError;
             }
             CustomerId = customerId;
         }
 
         private void SetFirstName(string firstName)
         {
-            if (firstName.Length > CustomerConstantsRules.MAXIMUM_CHARACTERS_FIRST_NAME)
-            {
-                throw new ArgumentOutOfRangeException(DomainResponseMessages.MaximumOf40CharactersError);
-            }
-
-            _firstName = firstName;
+           _firstName = firstName;
         }
 
         private void SetLastName(string lastName)
         {
-            if (lastName.Length > CustomerConstantsRules.MAXIMUM_CHARACTERS_LAST_NAME)
-            {
-                throw new ArgumentOutOfRangeException(DomainResponseMessages.MaximumOf40CharactersError);
-            }
-
             _lastName = lastName;
         }
 
@@ -96,28 +87,29 @@ namespace DemoBackShopCore.Models
 
         private void SetDateOfBirth(DateTime dateOfBirth)
         {
-            var dateNow = DateTime.Now;
-
-            if (dateOfBirth.ToUniversalTime().Date > dateNow.Date)
-            {
-                throw new ArgumentOutOfRangeException(DomainResponseMessages.DateOfBirthError);
-            }
-
             _dateOfBirth = DateOnly.FromDateTime(dateTime: dateOfBirth);
         }
 
         private void Validate(string firstName, string lastName, DateTime dateOfBirth)
-        {
-            _isValid = false;
-            
-            var dateNow = DateTime.Now;
-            
-            if (firstName.Length > CustomerConstantsRules.MAXIMUM_CHARACTERS_FIRST_NAME || lastName.Length > CustomerConstantsRules.MAXIMUM_CHARACTERS_LAST_NAME || dateOfBirth.ToUniversalTime().Date > dateNow.Date)
+        {   
+             if (firstName.Length > CustomerConstantsRules.MAXIMUM_CHARACTERS_FIRST_NAME || lastName.Length > CustomerConstantsRules.MAXIMUM_CHARACTERS_LAST_NAME)
             {
-                throw new ArgumentOutOfRangeException(DomainResponseMessages.CustomerFieldsAreInvalidError);
+                _isValid = false;
+                ErrorMessageIfIsNotValid = DomainResponseMessages.MaximumOf40CharactersError;
             }
 
-            _isValid = true;
+            DateTime dateNow = DateTime.Now;
+
+            if (dateOfBirth.ToUniversalTime().Date > dateNow.Date)
+            {
+                _isValid = false;
+                ErrorMessageIfIsNotValid = DomainResponseMessages.DateOfBirthError;
+            }
+
+            if (ErrorMessageIfIsNotValid == string.Empty)
+            {
+                _isValid = true;
+            }
         }
     }
 }

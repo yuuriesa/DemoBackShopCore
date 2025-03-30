@@ -14,9 +14,9 @@ namespace DemoBackShopCore.Services
             _repository = repository;
         }
 
-        public Customer Add(CustomerRequestDTO customerRequest)
+        public ServiceResult<Customer> Add(CustomerRequestDTO customerRequest)
         {
-            Customer customer = Customer.RegisterNew
+            Customer newCustomer = Customer.RegisterNew
                                 (
                                     firstName: customerRequest.FirstName,
                                     lastName: customerRequest.LastName,
@@ -24,13 +24,13 @@ namespace DemoBackShopCore.Services
                                     dateOfBirth: customerRequest.DateOfBirth
                                 );
             
-            // if (!customer.IsValid())
-            // {
-            //     return
-            // }
+            if (!newCustomer.IsValid())
+            {
+                return ServiceResult<Customer>.ErrorResult(message: newCustomer.ErrorMessageIfIsNotValid, statusCode: 422);
+            }
 
-            _repository.Add(entity: customer);
-            return GetById(id: customer.CustomerId);
+            _repository.Add(entity: newCustomer);
+            return ServiceResult<Customer>.SuccessResult(data: newCustomer, statusCode: 201);
         }
 
         public void AddRange(IEnumerable<CustomerRequestDTO> customers)
