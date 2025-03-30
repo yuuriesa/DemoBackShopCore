@@ -71,5 +71,17 @@ namespace DemoBackShopCore.Services
 
             return customerResponse;
         }
+        public List<CustomerResponseDTO> GenerateListCustomersResponseDTO(IQueryable<Customer> customers)
+        {
+            List<CustomerResponseDTO> customersResponses = new List<CustomerResponseDTO>();
+
+            foreach (var customer in customers)
+            {
+                CustomerResponseDTO customerResponse = GenerateCustomerResponseDTO(customer: customer);
+                customersResponses.Add(item: customerResponse);
+            }
+
+            return customersResponses;
+        }
     }
 }

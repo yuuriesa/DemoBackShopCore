@@ -30,14 +30,7 @@ namespace DemoBackShopCore.Controllers
 
             if (customers.Count() == 0) return NoContent();
 
-            List<CustomerResponseDTO> customersResponses = new List<CustomerResponseDTO>();
-
-            foreach (var customer in customers)
-            {
-                CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: customer);
-                customersResponses.Add(item: customerResponse);
-            }
-
+            List<CustomerResponseDTO> customersResponses = _services.GenerateListCustomersResponseDTO(customers: customers);
 
             return Ok(customersResponses);
         }

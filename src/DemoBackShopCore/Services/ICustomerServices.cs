@@ -13,6 +13,7 @@ namespace DemoBackShopCore.Services
         public void AddRange(IEnumerable<CustomerRequestDTO> customers);
         public void Update(int id, CustomerRequestDTO customer);
         public void Remove(int id);
-        public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer); 
+        public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer);
+        public List<CustomerResponseDTO> GenerateListCustomersResponseDTO(IQueryable<Customer> customers);
     }
 }
