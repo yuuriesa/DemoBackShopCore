@@ -9,6 +9,7 @@ namespace DemoBackShopCore.Services
     {
         public IQueryable<Customer> GetAll(PaginationFilter paginationFilter);
         public Customer GetById(int id);
+        public Customer GetCustomerByEmail(string emailAddress);
         public ServiceResult<Customer> Add(CustomerRequestDTO customerRequest);
         public void AddRange(IEnumerable<CustomerRequestDTO> customers);
         public void Update(int id, CustomerRequestDTO customer);

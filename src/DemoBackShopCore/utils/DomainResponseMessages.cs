@@ -13,6 +13,7 @@ namespace DemoBackShopCore.Utils
         public const string LastNameIsRequired = "LastName Is Required";
         public const string EmailAddressIsRequired = "EmailAddress Is Required";
         public const string DateOfBirthIsRequired = "DateOfBirth Is Required";
+        public const string CustomerEmailExistsError = "this email exists";
         public const string CustomerPaginationError = "The pagination parameters 'pageSize' and 'pageNumber' must be positive numbers. Check the values ​​provided.";
     }
 }

@@ -16,6 +16,16 @@ namespace DemoBackShopCore.Services
 
         public ServiceResult<Customer> Add(CustomerRequestDTO customerRequest)
         {
+            Customer customerExists = GetCustomerByEmail(emailAddress: customerRequest.EmailAddress);
+
+            if (customerExists != null)
+            {
+                return ServiceResult<Customer>.ErrorResult
+                (
+                    message: $"{DomainResponseMessages.CustomerEmailExistsError}: {customerExists.EmailAddress}", statusCode: 409
+                );
+            }
+
             Customer newCustomer = Customer.RegisterNew
                                 (
                                     firstName: customerRequest.FirstName,
@@ -82,6 +92,12 @@ namespace DemoBackShopCore.Services
             }
 
             return customersResponses;
+        }
+
+        public Customer GetCustomerByEmail(string emailAddress)
+        {
+            Customer customer = _repository.GetCustomerByEmail(emailAddress: emailAddress);
+            return customer;
         }
     }
 }
