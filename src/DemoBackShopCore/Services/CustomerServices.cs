@@ -58,9 +58,16 @@ namespace DemoBackShopCore.Services
             return _repository.GetById(id: id);
         }
 
-        public void Remove(int id)
+        public ServiceResult<Customer> Remove(int id)
         {
-            throw new NotImplementedException();
+            Customer customer = GetById(id: id);
+            if (customer == null)
+            {
+                return ServiceResult<Customer>.ErrorResult(message: DomainResponseMessages.CustomerNotFoundMessageError, statusCode: 404);
+            }
+
+            _repository.Remove(id: id);
+            return ServiceResult<Customer>.SuccessResult(data: customer);
         }
 
         public void Update(int id, CustomerRequestDTO customer)

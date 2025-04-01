@@ -38,14 +38,14 @@ namespace DemoBackShopCore.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            Customer customer = _services.GetById(id: id);
+            Customer result = _services.GetById(id: id);
 
-            if (customer == null)
+            if (result == null)
             {
                 return NotFound(DomainResponseMessages.CustomerNotFoundMessageError);
             }
 
-            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: customer);
+            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: result);
 
             return Ok(customerResponse);
         }
@@ -53,18 +53,33 @@ namespace DemoBackShopCore.Controllers
         [HttpPost]
         public IActionResult Add(CustomerRequestDTO customerRequest)
         {
-            ServiceResult<Customer> customer = _services.Add(customerRequest: customerRequest);
+            ServiceResult<Customer> result = _services.Add(customerRequest: customerRequest);
 
-            if (!customer.Success)
+            if (!result.Success)
             {
-                return StatusCode(statusCode: customer.StatusCode, value: customer.Message);
+                return StatusCode(statusCode: result.StatusCode, value: result.Message);
             }
 
             _dbContext.SaveChanges();
             
-            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: customer.Data);
+            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: result.Data);
 
             return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = customerResponse.CustomerId }, value: customerResponse);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Remove(int id)
+        {
+            ServiceResult<Customer> result = _services.Remove(id: id);
+
+            if (!result.Success)
+            {
+                return StatusCode(statusCode: result.StatusCode, value: result.Message);
+            }
+
+            _dbContext.SaveChanges();
+
+            return NoContent();
         }
     }
 }
