@@ -67,6 +67,18 @@ namespace DemoBackShopCore.Controllers
             return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = customerResponse.CustomerId }, value: customerResponse);
         }
 
+        [HttpPost("batch")]
+        public IActionResult Add(List<CustomerRequestDTO> customers)
+        {
+            return NoContent();
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult Update(int id, CustomerRequestDTO customer)
+        {
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Remove(int id)
         {
