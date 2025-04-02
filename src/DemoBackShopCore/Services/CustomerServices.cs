@@ -43,9 +43,45 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Customer>.SuccessResult(data: newCustomer, statusCode: 201);
         }
 
-        public void AddRange(IEnumerable<CustomerRequestDTO> customers)
+        public async Task<ServiceResult<List<Customer>>> AddRange(IEnumerable<CustomerRequestDTO> customers)
         {
-            throw new NotImplementedException();
+            List<Customer> newListCustomers = new List<Customer>();
+
+            foreach (var customer in customers)
+            {
+                Customer customerExists = GetCustomerByEmail(emailAddress: customer.EmailAddress);
+
+                if (customerExists != null)
+                {
+                    return ServiceResult<List<Customer>>.ErrorResult
+                    (
+                        message: $"{DomainResponseMessages.CustomerEmailExistsError}: {customerExists.EmailAddress}",
+                        statusCode: 409
+                    );
+                }
+                
+                Customer newCustomer = Customer.RegisterNew
+                (
+                    firstName: customer.FirstName,
+                    lastName: customer.LastName,
+                    emailAddress: customer.EmailAddress,
+                    dateOfBirth: customer.DateOfBirth
+                );
+
+                if (!newCustomer.IsValid())
+                {
+                    return ServiceResult<List<Customer>>.ErrorResult
+                    (
+                        message: $"{newCustomer.ErrorMessageIfIsNotValid} - customer: {newCustomer.EmailAddress}",
+                        statusCode: 422
+                    );
+                }
+
+                newListCustomers.Add(item: newCustomer);
+            }
+
+            _repository.AddRange(entities: newListCustomers);
+            return ServiceResult<List<Customer>>.SuccessResult(data: newListCustomers);
         }
 
         public IQueryable<Customer> GetAll(PaginationFilter paginationFilter)

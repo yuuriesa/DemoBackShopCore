@@ -4,6 +4,7 @@ using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
 using DemoBackShopCore.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Controllers
 {
@@ -68,9 +69,36 @@ namespace DemoBackShopCore.Controllers
         }
 
         [HttpPost("batch")]
-        public IActionResult Add(List<CustomerRequestDTO> customers)
+        public async Task<IActionResult> AddBatch(List<CustomerRequestDTO> customers)
         {
-            return NoContent();
+            var transaction = _dbContext.Database.BeginTransaction();
+            List<CustomerResponseDTO> customersReponse = new List<CustomerResponseDTO>();
+
+            try
+            {
+                ServiceResult<List<Customer>> result = await _services.AddRange(customers: customers);
+
+                if (!result.Success)
+                {
+                    return StatusCode(statusCode: result.StatusCode, value: result.Message);
+                }
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                foreach (var customer in result.Data)
+                {
+                    Customer getCustomerByEmail = _services.GetCustomerByEmail(emailAddress: customer.EmailAddress);
+                    customersReponse.Add(item: _services.GenerateCustomerResponseDTO(customer: getCustomerByEmail));
+                }
+            }
+            catch (Exception err)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(err.Message);
+            }
+            
+            return Ok(customersReponse);
         }
 
         [HttpPost("{id}")]

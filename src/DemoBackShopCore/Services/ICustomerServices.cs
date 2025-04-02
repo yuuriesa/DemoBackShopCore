@@ -11,7 +11,7 @@ namespace DemoBackShopCore.Services
         public Customer GetById(int id);
         public Customer GetCustomerByEmail(string emailAddress);
         public ServiceResult<Customer> Add(CustomerRequestDTO customerRequest);
-        public void AddRange(IEnumerable<CustomerRequestDTO> customers);
+        public Task<ServiceResult<List<Customer>>> AddRange(IEnumerable<CustomerRequestDTO> customers);
         public void Update(int id, CustomerRequestDTO customer);
         public ServiceResult<Customer> Remove(int id);
         public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer);
