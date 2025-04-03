@@ -101,10 +101,21 @@ namespace DemoBackShopCore.Controllers
             return Ok(customersReponse);
         }
 
-        [HttpPost("{id}")]
-        public IActionResult Update(int id, CustomerRequestDTO customer)
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, CustomerRequestDTO customerRequestDTO)
         {
-            return NoContent();
+            ServiceResult<Customer> result = _services.Update(id: id, customerRequestDTO: customerRequestDTO);
+
+            if (!result.Success)
+            {
+                return StatusCode(statusCode: result.StatusCode, value: result.Message);
+            }
+
+            _dbContext.SaveChanges();
+
+            CustomerResponseDTO customerResponse = _services.GenerateCustomerResponseDTO(customer: result.Data);
+
+            return Ok(customerResponse);
         }
 
         [HttpDelete("{id}")]

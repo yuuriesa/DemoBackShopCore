@@ -1,17 +1,21 @@
+using DemoBackShopCore.Data;
 using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Repository;
 using DemoBackShopCore.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Services
 {
     public class CustomerServices : ICustomerServices
     {
         private readonly ICustomerRepository _repository;
+        private readonly ApplicationDbContext _dbContext;
 
-        public CustomerServices(ICustomerRepository repository)
+        public CustomerServices(ICustomerRepository repository, ApplicationDbContext dbContext)
         {
             _repository = repository;
+            _dbContext = dbContext;
         }
 
         public ServiceResult<Customer> Add(CustomerRequestDTO customerRequest)
@@ -106,9 +110,51 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Customer>.SuccessResult(data: customer);
         }
 
-        public void Update(int id, CustomerRequestDTO customer)
+        public ServiceResult<Customer> Update(int id, CustomerRequestDTO customerRequestDTO)
         {
-            throw new NotImplementedException();
+            Customer getCustomerByEmail = _dbContext.Customers.AsNoTracking().FirstOrDefault(c => c.EmailAddress == customerRequestDTO.EmailAddress);
+
+            if (getCustomerByEmail != null && getCustomerByEmail.CustomerId != id)
+            {
+                return ServiceResult<Customer>.ErrorResult
+                    (
+                        message: DomainResponseMessages.CustomerEmailExistsError,
+                        statusCode: 409
+                    ); 
+            }
+
+            Customer customerExists = _dbContext.Customers.AsNoTracking().FirstOrDefault(c => c.CustomerId == id);
+
+            if (customerExists == null)
+            {
+                return ServiceResult<Customer>.ErrorResult
+                    (
+                        message: DomainResponseMessages.CustomerNotFoundMessageError,
+                        statusCode: 404
+                    ); 
+            }
+
+            Customer updatedCustomer = Customer.SetExistingInfo
+            (
+                customerId: customerExists.CustomerId,
+                firstName: customerRequestDTO.FirstName,
+                lastName: customerRequestDTO.LastName,
+                emailAddress: customerRequestDTO.EmailAddress,
+                dateOfBirth: DateOnly.FromDateTime(customerRequestDTO.DateOfBirth)
+            );
+
+            if (!updatedCustomer.IsValid())
+            {
+                return ServiceResult<Customer>.ErrorResult
+                (
+                    message: updatedCustomer.ErrorMessageIfIsNotValid,
+                    statusCode: 422
+                );
+            }
+
+            _repository.Update(id: id, entity: updatedCustomer);
+
+            return ServiceResult<Customer>.SuccessResult(data: updatedCustomer);
         }
 
         public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer)
