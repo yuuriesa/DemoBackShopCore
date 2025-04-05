@@ -47,7 +47,7 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Customer>.SuccessResult(data: newCustomer, statusCode: 201);
         }
 
-        public async Task<ServiceResult<List<Customer>>> AddRange(IEnumerable<CustomerRequestDTO> customers)
+        public async Task<ServiceResult<List<Customer>>> AddBatch(IEnumerable<CustomerRequestDTO> customers)
         {
             List<Customer> newListCustomers = new List<Customer>();
 

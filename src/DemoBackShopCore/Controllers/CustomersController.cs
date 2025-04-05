@@ -76,7 +76,7 @@ namespace DemoBackShopCore.Controllers
 
             try
             {
-                ServiceResult<List<Customer>> result = await _services.AddRange(customers: customers);
+                ServiceResult<List<Customer>> result = await _services.AddBatch(customers: customers);
 
                 if (!result.Success)
                 {
