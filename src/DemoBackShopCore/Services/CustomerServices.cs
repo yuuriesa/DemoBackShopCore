@@ -49,6 +49,17 @@ namespace DemoBackShopCore.Services
 
         public async Task<ServiceResult<List<Customer>>> AddBatch(IEnumerable<CustomerRequestDTO> customers)
         {
+            IEnumerable<string> duplicateEmails = customers.GroupBy(c => c.EmailAddress).Where(c => c.Count() > 1).Select(c => c.Key);
+
+            if (duplicateEmails.Any())
+            {
+                return ServiceResult<List<Customer>>.ErrorResult
+                (
+                    message: DomainResponseMessages.DuplicateEmailError,
+                    statusCode: 400
+                );
+            }
+
             List<Customer> newListCustomers = new List<Customer>();
 
             foreach (var customer in customers)
