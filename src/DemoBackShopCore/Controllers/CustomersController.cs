@@ -71,6 +71,10 @@ namespace DemoBackShopCore.Controllers
         [HttpPost("batch")]
         public async Task<IActionResult> AddBatch(List<CustomerRequestDTO> customers)
         {
+            if (customers.Count() == 0)
+            {
+                return NoContent();
+            }
             var transaction = _dbContext.Database.BeginTransaction();
             List<CustomerResponseDTO> customersReponse = new List<CustomerResponseDTO>();
 

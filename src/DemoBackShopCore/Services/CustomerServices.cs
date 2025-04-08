@@ -123,17 +123,6 @@ namespace DemoBackShopCore.Services
 
         public ServiceResult<Customer> Update(int id, CustomerRequestDTO customerRequestDTO)
         {
-            Customer getCustomerByEmail = _dbContext.Customers.AsNoTracking().FirstOrDefault(c => c.EmailAddress == customerRequestDTO.EmailAddress);
-
-            if (getCustomerByEmail != null && getCustomerByEmail.CustomerId != id)
-            {
-                return ServiceResult<Customer>.ErrorResult
-                    (
-                        message: DomainResponseMessages.CustomerEmailExistsError,
-                        statusCode: 409
-                    ); 
-            }
-
             Customer customerExists = _dbContext.Customers.AsNoTracking().FirstOrDefault(c => c.CustomerId == id);
 
             if (customerExists == null)
@@ -142,6 +131,17 @@ namespace DemoBackShopCore.Services
                     (
                         message: DomainResponseMessages.CustomerNotFoundMessageError,
                         statusCode: 404
+                    ); 
+            }
+
+            Customer getCustomerByEmail = _dbContext.Customers.AsNoTracking().FirstOrDefault(c => c.EmailAddress == customerRequestDTO.EmailAddress);
+
+            if (getCustomerByEmail != null && getCustomerByEmail.CustomerId != id)
+            {
+                return ServiceResult<Customer>.ErrorResult
+                    (
+                        message: DomainResponseMessages.CustomerEmailExistsError,
+                        statusCode: 409
                     ); 
             }
 
