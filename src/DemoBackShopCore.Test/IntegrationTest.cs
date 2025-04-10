@@ -54,6 +54,38 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(expected: System.Net.HttpStatusCode.Created, actual: response.StatusCode);
     }
 
+    [Fact(DisplayName = "POST /api/Customers deve retornar 400 BadRequest ao passar o firstName maior que 40 caracteres")]
+    [InlineData("/api/Customers")]
+    public async Task AddCustomer_ReturnBadRequest()
+    {
+        //Arrange
+        CustomerRequestDTO request = new CustomerRequestDTO
+        {
+            FirstName = "YuriYuriYuriYuriYuriYuriYuriYuriYuriYuriYuri",
+            LastName = "Torres",
+            EmailAddress = "yuriAA@exemplo.com",
+            DateOfBirth = DateTime.UtcNow.AddDays(-20)
+        };
+            
+        string json = JsonConvert.SerializeObject(request);
+        StringContent content = new StringContent
+        (
+            content: json,
+            encoding: Encoding.UTF8,
+            mediaType: "application/json"
+        );
+
+        //Act
+        HttpResponseMessage response = await _client.PostAsync
+        (
+            requestUri: "/api/Customers", 
+            content: content
+        );
+
+        //Assert
+        Assert.Equal(expected: System.Net.HttpStatusCode.BadRequest, actual: response.StatusCode);
+    }
+
     [Fact(DisplayName = "POST /api/Customers deve retornar 422 Error por causa da data incorreta.")]
     [InlineData("/api/Customers")]
     public async Task AddCustomers_ReturnsUnprocessableEntity()
