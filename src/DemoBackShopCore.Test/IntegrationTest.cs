@@ -56,7 +56,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
 
     [Fact(DisplayName = "POST /api/Customers deve retornar 400 BadRequest ao passar o firstName maior que 40 caracteres")]
     [InlineData("/api/Customers")]
-    public async Task AddCustomer_ReturnBadRequest()
+    public async Task AddCustomer_ReturnBadRequestFirstNameIcorrect()
     {
         //Arrange
         CustomerRequestDTO request = new CustomerRequestDTO
