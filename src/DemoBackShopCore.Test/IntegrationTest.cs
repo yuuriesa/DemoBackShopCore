@@ -1,10 +1,55 @@
 ﻿namespace DemoBackShopCore.Test;
 
-public class IntegrationTest
-{
-    [Fact]
-    public void Test1()
-    {
+using Microsoft.AspNetCore.Mvc.Testing;
+using DemoBackShopCore.Models;
+using DemoBackShopCore.Controllers;
+using Microsoft.AspNetCore.Hosting;
+using Moq;
+using Microsoft.Extensions.DependencyInjection;
+using DemoBackShopCore.DTOs;
+using Newtonsoft.Json;
+using System.Text;
 
+public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
+{
+    public HttpClient _client;
+
+    public IntegrationTest(WebApplicationFactory<Program> factory)
+    {
+        // Cria um HttpClient para chamar a aplicação real
+        _client = factory.CreateClient();
+    }
+
+    [Fact(DisplayName = "POST /api/Customers deve retornar 201 Created")]
+    [InlineData("/api/Customers")]
+    public async Task AddCustomer_ReturnsCreated()
+    {
+        //Arrange
+        CustomerRequestDTO request = new CustomerRequestDTO
+        {
+            FirstName = "Yuri",
+            LastName = "Torres",
+            EmailAddress = "yuri@exemplo.com",
+            DateOfBirth = DateTime.UtcNow.AddDays(-20)
+        };
+            
+        string json = JsonConvert.SerializeObject(request);
+        StringContent content = new StringContent
+        (
+            content: json,
+            encoding: Encoding.UTF8,
+            mediaType: "application/json"
+        );
+
+        //Act
+        HttpResponseMessage response = await _client.PostAsync
+        (
+            requestUri: "/api/Customers", 
+            content: content
+        );
+
+        //Assert
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(expected: System.Net.HttpStatusCode.Created, actual: response.StatusCode);
     }
 }
