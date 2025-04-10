@@ -63,7 +63,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         {
             FirstName = "YuriYuriYuriYuriYuriYuriYuriYuriYuriYuriYuri",
             LastName = "Torres",
-            EmailAddress = "yuriAA@exemplo.com",
+            EmailAddress = "yuriB@exemplo.com",
             DateOfBirth = DateTime.UtcNow.AddDays(-20)
         };
             
@@ -86,6 +86,70 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(expected: System.Net.HttpStatusCode.BadRequest, actual: response.StatusCode);
     }
 
+    [Fact(DisplayName = "POST /api/Customers deve retornar 400 BadRequest ao passar o lastName maior que 40 caracteres")]
+    [InlineData("/api/Customers")]
+    public async Task AddCustomer_ReturnBadRequestLastNameIcorrect()
+    {
+        //Arrange
+        CustomerRequestDTO request = new CustomerRequestDTO
+        {
+            FirstName = "Yuri",
+            LastName = "YuriYuriYuriYuriYuriYuriYuriYuriYuriYuriYuri",
+            EmailAddress = "yuriB@exemplo.com",
+            DateOfBirth = DateTime.UtcNow.AddDays(-20)
+        };
+            
+        string json = JsonConvert.SerializeObject(request);
+        StringContent content = new StringContent
+        (
+            content: json,
+            encoding: Encoding.UTF8,
+            mediaType: "application/json"
+        );
+
+        //Act
+        HttpResponseMessage response = await _client.PostAsync
+        (
+            requestUri: "/api/Customers", 
+            content: content
+        );
+
+        //Assert
+        Assert.Equal(expected: System.Net.HttpStatusCode.BadRequest, actual: response.StatusCode);
+    }
+
+    [Fact(DisplayName = "POST /api/Customers deve retornar 409 Conflict ao passar o email repetido do primeiro teste que vai pro banco de dados.")]
+    [InlineData("/api/Customers")]
+    public async Task AddCustomer_ReturnConflict()
+    {
+        //Arrange
+        CustomerRequestDTO request = new CustomerRequestDTO
+        {
+            FirstName = "Yuri",
+            LastName = "Torres",
+            EmailAddress = "yuriA@exemplo.com",
+            DateOfBirth = DateTime.UtcNow.AddDays(-20)
+        };
+            
+        string json = JsonConvert.SerializeObject(request);
+        StringContent content = new StringContent
+        (
+            content: json,
+            encoding: Encoding.UTF8,
+            mediaType: "application/json"
+        );
+
+        //Act
+        HttpResponseMessage response = await _client.PostAsync
+        (
+            requestUri: "/api/Customers", 
+            content: content
+        );
+
+        //Assert
+        Assert.Equal(expected: System.Net.HttpStatusCode.Conflict, actual: response.StatusCode);
+    }
+
     [Fact(DisplayName = "POST /api/Customers deve retornar 422 Error por causa da data incorreta.")]
     [InlineData("/api/Customers")]
     public async Task AddCustomers_ReturnsUnprocessableEntity()
@@ -95,7 +159,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         {
             FirstName = "Yuri",
             LastName = "Torres",
-            EmailAddress = "yuriB@exemplo.com",
+            EmailAddress = "yuriD@exemplo.com",
             DateOfBirth = DateTime.UtcNow.AddDays(1)
         };
             
