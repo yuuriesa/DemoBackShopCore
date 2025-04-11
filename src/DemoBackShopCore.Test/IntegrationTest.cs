@@ -21,6 +21,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         _client = factory.CreateClient();
     }
 
+    // api/Customers Tests
     [Fact(DisplayName = "POST /api/Customers deve retornar 201 Created")]
     [InlineData("/api/Customers")]
     public async Task AddCustomer_ReturnsCreated()
