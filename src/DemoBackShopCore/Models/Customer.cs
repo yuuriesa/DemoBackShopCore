@@ -17,6 +17,7 @@ namespace DemoBackShopCore.Models
         public string LastName => _lastName;
         public string EmailAddress => _emailAddress;
         public DateOnly DateOfBirth => _dateOfBirth;
+        public ICollection<Address> Addresses { get; set; }
         public string ErrorMessageIfIsNotValid { get; private set; } = string.Empty;
 
         //constructors

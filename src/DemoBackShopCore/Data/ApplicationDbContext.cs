@@ -6,6 +6,7 @@ namespace DemoBackShopCore.Data
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options: options)
         {
@@ -50,8 +51,62 @@ namespace DemoBackShopCore.Data
                 .HasField("_dateOfBirth")
                 .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
 
+                entity.HasMany(c => c.Addresses)
+                .WithOne(a => a.Customer)
+                .HasForeignKey(c => c.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
                 entity.Ignore(c => c.ErrorMessageIfIsNotValid);
             });
+
+            modelBuilder.Entity<Address>(entity => 
+                {
+                    entity.HasKey(a => a.AddressId);
+
+                    entity.Property(a => a.ZipCode)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnName("ZipCode");
+
+                    entity.Property(a => a.Street)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("Street");
+
+                    entity.Property(a => a.Number)
+                    .IsRequired()
+                    .HasColumnName("Number");
+
+                    entity.Property(a => a.Neighborhood)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("Neighborhood");
+
+                    entity.Property(a => a.AddressComplement)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("AddressComplement");
+
+                    entity.Property(a => a.City)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("City");
+
+                    entity.Property(a => a.State)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("State");
+
+                    entity.Property(a => a.Country)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("Country");
+
+                    entity.HasOne(a => a.Customer)
+                    .WithMany(c => c.Addresses)
+                    .HasForeignKey(c => c.CustomerId);
+                }
+            );
         }
     }
 }
