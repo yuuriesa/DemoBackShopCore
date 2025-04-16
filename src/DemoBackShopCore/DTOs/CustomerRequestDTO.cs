@@ -19,5 +19,7 @@ namespace DemoBackShopCore.DTOs
         [Required(ErrorMessage = DomainResponseMessages.DateOfBirthIsRequired)]
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
+        [Required]
+        public ICollection<AddressRequestDTO> Addresses { get; set; }
     }
 }
