@@ -20,6 +20,6 @@ namespace DemoBackShopCore.DTOs
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         [Required]
-        public ICollection<AddressRequestDTO> Addresses { get; set; }
+        public List<AddressRequestDTO> Addresses { get; set; }
     }
 }

@@ -35,7 +35,8 @@ namespace DemoBackShopCore.Services
                                     firstName: customerRequest.FirstName,
                                     lastName: customerRequest.LastName,
                                     emailAddress: customerRequest.EmailAddress,
-                                    dateOfBirth: customerRequest.DateOfBirth
+                                    dateOfBirth: customerRequest.DateOfBirth,
+                                    addresses: customerRequest.Addresses
                                 );
             
             if (!newCustomer.IsValid())
@@ -80,7 +81,8 @@ namespace DemoBackShopCore.Services
                     firstName: customer.FirstName,
                     lastName: customer.LastName,
                     emailAddress: customer.EmailAddress,
-                    dateOfBirth: customer.DateOfBirth
+                    dateOfBirth: customer.DateOfBirth,
+                    addresses: customer.Addresses
                 );
 
                 if (!newCustomer.IsValid())
@@ -151,7 +153,8 @@ namespace DemoBackShopCore.Services
                 firstName: customerRequestDTO.FirstName,
                 lastName: customerRequestDTO.LastName,
                 emailAddress: customerRequestDTO.EmailAddress,
-                dateOfBirth: DateOnly.FromDateTime(customerRequestDTO.DateOfBirth)
+                dateOfBirth: DateOnly.FromDateTime(customerRequestDTO.DateOfBirth),
+                addresses: customerExists.Addresses.ToList()
             );
 
             if (!updatedCustomer.IsValid())
