@@ -10,7 +10,7 @@ namespace DemoBackShopCore.Models
         private string _lastName;
         private string _emailAddress;
         private DateOnly _dateOfBirth;
-        private ICollection<Address> _addresses;
+        private ICollection<Address> _addresses = new List<Address>();
         private bool _isValid { get; set; } = false;
 
         //public properties
@@ -140,6 +140,7 @@ namespace DemoBackShopCore.Models
                     Street = address.Street,
                     Number = address.Number,
                     Neighborhood = address.Neighborhood,
+                    AddressComplement = address.AddressComplement,
                     City = address.City,
                     State = address.State,
                     Country = address.Country
