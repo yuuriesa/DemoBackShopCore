@@ -173,13 +173,32 @@ namespace DemoBackShopCore.Services
 
         public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer)
         {
+            List<AddressResponseDTO> addresses = new List<AddressResponseDTO>();
+
+            foreach (var address in customer.Addresses)
+            {
+                addresses.Add(item: new AddressResponseDTO
+                {
+                    AddressId = address.AddressId,
+                    ZipCode = address.ZipCode,
+                    Street = address.Street,
+                    Number = address.Number,
+                    Neighborhood = address.Neighborhood,
+                    AddressComplement = address.AddressComplement,
+                    City = address.City,
+                    State = address.State,
+                    Country = address.Country
+                });
+            }
+
             CustomerResponseDTO customerResponse = new CustomerResponseDTO
             {
                 CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 EmailAddress = customer.EmailAddress,
-                DateOfBirth = customer.DateOfBirth
+                DateOfBirth = customer.DateOfBirth,
+                Addresses = addresses
             };
 
             return customerResponse;

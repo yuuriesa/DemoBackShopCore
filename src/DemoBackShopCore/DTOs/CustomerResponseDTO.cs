@@ -7,5 +7,6 @@ namespace DemoBackShopCore.DTOs
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public DateOnly DateOfBirth { get; set; }
+        public List<AddressResponseDTO> Addresses { get; set; }
     }
 }
