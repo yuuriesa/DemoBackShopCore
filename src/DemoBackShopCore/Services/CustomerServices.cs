@@ -103,7 +103,7 @@ namespace DemoBackShopCore.Services
 
         public IQueryable<Customer> GetAll(PaginationFilter paginationFilter)
         {
-            return _repository.GetAll(paginationFilter: paginationFilter);
+            return _repository.GetAll(paginationFilter: paginationFilter).Include(a => a.Addresses);
         }
 
         public Customer GetById(int id)
