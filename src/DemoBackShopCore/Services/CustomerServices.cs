@@ -131,7 +131,7 @@ namespace DemoBackShopCore.Services
 
         public ServiceResult<Customer> Update(int id, CustomerRequestDTO customerRequestDTO)
         {
-            Customer customerExists = _dbContext.Customers.AsNoTracking().FirstOrDefault(c => c.CustomerId == id);
+            Customer customerExists = _dbContext.Customers.AsNoTracking().Where(c => c.CustomerId == id).Include(c => c.Addresses).FirstOrDefault();
 
             if (customerExists == null)
             {
@@ -153,6 +153,28 @@ namespace DemoBackShopCore.Services
                     ); 
             }
 
+            List<Address> newAddresses = new List<Address>();
+
+            foreach (var address in customerRequestDTO.Addresses)
+            {
+                Address newAddress = new Address
+                {
+                    ZipCode = address.ZipCode,
+                    Street = address.Street,
+                    Number = address.Number,
+                    Neighborhood = address.Neighborhood,
+                    AddressComplement = address.AddressComplement,
+                    City = address.City,
+                    State = address.State,
+                    Country = address.Country
+                };
+
+                newAddresses.Add(item: newAddress);
+            }
+
+            _dbContext.Addresses.RemoveRange(entities: customerExists.Addresses);
+            _dbContext.SaveChanges();
+
             Customer updatedCustomer = Customer.SetExistingInfo
             (
                 customerId: customerExists.CustomerId,
@@ -160,7 +182,7 @@ namespace DemoBackShopCore.Services
                 lastName: customerRequestDTO.LastName,
                 emailAddress: customerRequestDTO.EmailAddress,
                 dateOfBirth: DateOnly.FromDateTime(customerRequestDTO.DateOfBirth),
-                addresses: customerExists.Addresses.ToList()
+                addresses: newAddresses
             );
 
             if (!updatedCustomer.IsValid())
