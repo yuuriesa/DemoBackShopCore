@@ -108,7 +108,13 @@ namespace DemoBackShopCore.Services
 
         public Customer GetById(int id)
         {
-            return _dbContext.Customers.Where(c => c.CustomerId == id).Include(c => c.Addresses).First();
+            Customer customer = _dbContext.Customers.Where(c => c.CustomerId == id).Include(c => c.Addresses).FirstOrDefault();
+            if (customer == null)
+            {
+                return null!;
+            }
+
+            return customer;
         }
 
         public ServiceResult<Customer> Remove(int id)
