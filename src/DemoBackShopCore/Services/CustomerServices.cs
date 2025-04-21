@@ -125,6 +125,8 @@ namespace DemoBackShopCore.Services
                 return ServiceResult<Customer>.ErrorResult(message: DomainResponseMessages.CustomerNotFoundMessageError, statusCode: 404);
             }
 
+            _dbContext.Addresses.RemoveRange(entities: customer.Addresses);
+
             _repository.Remove(id: id);
             return ServiceResult<Customer>.SuccessResult(data: customer);
         }
