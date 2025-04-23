@@ -175,6 +175,24 @@ namespace DemoBackShopCore.Services
             batch2CustomerResponseResult.CustomersSuccessCount = success.Count;
             batch2CustomerResponseResult.CustomersFailureCount = failure.Count;
 
+            if (success.Count == 0)
+            {
+                batch2CustomerResponseResult.Success = null;
+            }
+            else
+            {
+                batch2CustomerResponseResult.Success.AddRange(success);
+            }
+
+            if (failure.Count == 0)
+            {
+                batch2CustomerResponseResult.Failure = null;
+            }
+            else
+            {
+                batch2CustomerResponseResult.Failure.AddRange(failure);
+            }
+
             return ServiceResult<Batch2CustomerResponseResult>.SuccessResult(data: batch2CustomerResponseResult);
         }
 
