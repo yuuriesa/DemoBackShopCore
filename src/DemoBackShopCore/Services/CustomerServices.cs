@@ -104,28 +104,37 @@ namespace DemoBackShopCore.Services
         public async Task<ServiceResult<Batch2CustomerResponseResult>> AddBatch2(IEnumerable<CustomerRequestDTO> customerRequests)
         {
             Batch2CustomerResponseResult batch2CustomerResponseResult = new Batch2CustomerResponseResult();
+            List<CustomerRequestDTO> successTemporary = new List<CustomerRequestDTO>();
             List<CustomerRequestDTO> success = new List<CustomerRequestDTO>();
             List<CustomerDTOWithMessageErrors> failure = new List<CustomerDTOWithMessageErrors>();
 
             IEnumerable<string> duplicateEmails = customerRequests.GroupBy(c => c.EmailAddress).Where(c => c.Count() > 1).Select(c => c.Key);
 
+            //Ele adiciona no failure certinho. Vi pelo Debug, então pode pular.
             if (duplicateEmails.Any())
             {
-                CustomerDTOWithMessageErrors customerDTOWithMessageErrors = new CustomerDTOWithMessageErrors(); 
                 foreach (var customer in customerRequests)
                 {
+                    CustomerDTOWithMessageErrors customerDTOWithMessageErrors = new CustomerDTOWithMessageErrors(); 
                     if (duplicateEmails.Contains(value: customer.EmailAddress))
                     {
                         customerDTOWithMessageErrors.Customer = customer;
                         customerDTOWithMessageErrors.FailureErrorsMessages.Add(item: DomainResponseMessages.DuplicateEmailError);
+                        failure.Add(item: customerDTOWithMessageErrors);
+                        continue;
                     }
+                    successTemporary.Add(item: customer);
                 }
-                failure.Add(item: customerDTOWithMessageErrors);
             }
+
+            // Sobre essa validação, eu notei que eu estou refazendo o loop em toda a lista de customers
+            // Ou seja, se antes já tinha customers no failure, eu estou passando por eles denovo, o que eu não posso
+            // Tenho que começar esse loop ignorando os que já estão no failure
+            // Então eu preciso fazer uma lista de failure e success temporarias.
 
             List<Customer> newListCustomers = new List<Customer>();
 
-            foreach (var customer in customerRequests)
+            foreach (var customer in successTemporary)
             {
                 Customer customerExists = GetCustomerByEmail(emailAddress: customer.EmailAddress);
 
