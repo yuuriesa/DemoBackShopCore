@@ -3,6 +3,7 @@ using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Repository;
 using DemoBackShopCore.Utils;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Services
@@ -125,6 +126,10 @@ namespace DemoBackShopCore.Services
                     }
                     successTemporary.Add(item: customer);
                 }
+            }
+            else
+            {
+                successTemporary.AddRange(collection: customerRequests);
             }
 
             // Sobre essa validação, eu notei que eu estou refazendo o loop em toda a lista de customers
