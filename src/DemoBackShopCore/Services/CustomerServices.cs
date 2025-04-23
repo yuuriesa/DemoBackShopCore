@@ -135,6 +135,8 @@ namespace DemoBackShopCore.Services
                     
                     customerDTOWithMessageErrors.Customer = customer;
                     customerDTOWithMessageErrors.FailureErrorsMessages.Add(item: $"{DomainResponseMessages.CustomerEmailExistsError}: {customerExists.EmailAddress}");
+                    failure.Add(item: customerDTOWithMessageErrors);
+                    continue;
                 }
                 
                 Customer newCustomer = Customer.RegisterNew
@@ -152,6 +154,8 @@ namespace DemoBackShopCore.Services
                     
                     customerDTOWithMessageErrors.Customer = customer;
                     customerDTOWithMessageErrors.FailureErrorsMessages.Add(item: $"{newCustomer.ErrorMessageIfIsNotValid} - customer: {newCustomer.EmailAddress}");
+                    failure.Add(item: customerDTOWithMessageErrors);
+                    continue;
                 }
 
                 newListCustomers.Add(item: newCustomer);
