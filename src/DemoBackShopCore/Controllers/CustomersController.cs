@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using DemoBackShopCore.Data;
 using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
@@ -69,18 +70,16 @@ namespace DemoBackShopCore.Controllers
         }
 
         [HttpPost("batch")]
-        public async Task<IActionResult> AddBatch(List<CustomerRequestDTO> customers)
+        public async Task<IActionResult> AddBatch(List<CustomerRequestDTO> customerRequests)
         {
-            if (customers.Count() == 0)
-            {
-                return NoContent();
-            }
+            if (customerRequests.Count() == 0) return NoContent();
+            
             var transaction = _dbContext.Database.BeginTransaction();
             List<CustomerResponseDTO> customersReponse = new List<CustomerResponseDTO>();
 
             try
             {
-                ServiceResult<List<Customer>> result = await _services.AddBatch(customers: customers);
+                ServiceResult<List<Customer>> result = await _services.AddBatch(customerRequests: customerRequests);
 
                 if (!result.Success)
                 {
@@ -103,6 +102,38 @@ namespace DemoBackShopCore.Controllers
             }
             
             return Ok(customersReponse);
+        }
+
+        [HttpPost("batch2")]
+        public async Task<IActionResult> AddBatch2(List<CustomerRequestDTO> customerRequests)
+        {
+            if (customerRequests.Count() == 0) return NoContent();
+
+            var transaction = _dbContext.Database.BeginTransaction();
+
+            Batch2CustomerResponseResult responseResult;
+
+            try
+            {
+                ServiceResult<Batch2CustomerResponseResult> result = await _services.AddBatch2(customerRequests: customerRequests);
+
+                if (!result.Success)
+                {
+                    return StatusCode(statusCode: result.StatusCode, value: result.Message);
+                }
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                responseResult = result.Data;
+            }
+            catch (Exception err)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(err.Message);
+            }
+
+            return Ok(responseResult);
         }
 
         [HttpPut("{id}")]

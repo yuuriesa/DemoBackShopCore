@@ -48,9 +48,9 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Customer>.SuccessResult(data: newCustomer, statusCode: 201);
         }
 
-        public async Task<ServiceResult<List<Customer>>> AddBatch(IEnumerable<CustomerRequestDTO> customers)
+        public async Task<ServiceResult<List<Customer>>> AddBatch(IEnumerable<CustomerRequestDTO> customerRequests)
         {
-            IEnumerable<string> duplicateEmails = customers.GroupBy(c => c.EmailAddress).Where(c => c.Count() > 1).Select(c => c.Key);
+            IEnumerable<string> duplicateEmails = customerRequests.GroupBy(c => c.EmailAddress).Where(c => c.Count() > 1).Select(c => c.Key);
 
             if (duplicateEmails.Any())
             {
@@ -63,7 +63,7 @@ namespace DemoBackShopCore.Services
 
             List<Customer> newListCustomers = new List<Customer>();
 
-            foreach (var customer in customers)
+            foreach (var customer in customerRequests)
             {
                 Customer customerExists = GetCustomerByEmail(emailAddress: customer.EmailAddress);
 
@@ -99,6 +99,70 @@ namespace DemoBackShopCore.Services
 
             _repository.AddRange(entities: newListCustomers);
             return ServiceResult<List<Customer>>.SuccessResult(data: newListCustomers);
+        }
+
+        public async Task<ServiceResult<Batch2CustomerResponseResult>> AddBatch2(IEnumerable<CustomerRequestDTO> customerRequests)
+        {
+            Batch2CustomerResponseResult batch2CustomerResponseResult = new Batch2CustomerResponseResult();
+            List<CustomerRequestDTO> success = new List<CustomerRequestDTO>();
+            List<CustomerDTOWithMessageErrors> failure = new List<CustomerDTOWithMessageErrors>();
+
+            IEnumerable<string> duplicateEmails = customerRequests.GroupBy(c => c.EmailAddress).Where(c => c.Count() > 1).Select(c => c.Key);
+
+            if (duplicateEmails.Any())
+            {
+                CustomerDTOWithMessageErrors customerDTOWithMessageErrors = new CustomerDTOWithMessageErrors(); 
+                foreach (var customer in customerRequests)
+                {
+                    if (duplicateEmails.Contains(value: customer.EmailAddress))
+                    {
+                        customerDTOWithMessageErrors.Customer = customer;
+                        customerDTOWithMessageErrors.FailureErrorsMessages.Add(item: DomainResponseMessages.DuplicateEmailError);
+                    }
+                }
+                failure.Add(item: customerDTOWithMessageErrors);
+            }
+
+            List<Customer> newListCustomers = new List<Customer>();
+
+            foreach (var customer in customerRequests)
+            {
+                Customer customerExists = GetCustomerByEmail(emailAddress: customer.EmailAddress);
+
+                if (customerExists != null)
+                {
+                    CustomerDTOWithMessageErrors customerDTOWithMessageErrors = new CustomerDTOWithMessageErrors();
+                    
+                    customerDTOWithMessageErrors.Customer = customer;
+                    customerDTOWithMessageErrors.FailureErrorsMessages.Add(item: $"{DomainResponseMessages.CustomerEmailExistsError}: {customerExists.EmailAddress}");
+                }
+                
+                Customer newCustomer = Customer.RegisterNew
+                (
+                    firstName: customer.FirstName,
+                    lastName: customer.LastName,
+                    emailAddress: customer.EmailAddress,
+                    dateOfBirth: customer.DateOfBirth,
+                    addresses: customer.Addresses
+                );
+
+                if (!newCustomer.IsValid())
+                {
+                    CustomerDTOWithMessageErrors customerDTOWithMessageErrors = new CustomerDTOWithMessageErrors();
+                    
+                    customerDTOWithMessageErrors.Customer = customer;
+                    customerDTOWithMessageErrors.FailureErrorsMessages.Add(item: $"{newCustomer.ErrorMessageIfIsNotValid} - customer: {newCustomer.EmailAddress}");
+                }
+
+                newListCustomers.Add(item: newCustomer);
+                success.Add(item: customer);
+            }
+
+            _repository.AddRange(entities: newListCustomers);
+            batch2CustomerResponseResult.CustomersSuccessCount = success.Count;
+            batch2CustomerResponseResult.CustomersFailureCount = failure.Count;
+
+            return ServiceResult<Batch2CustomerResponseResult>.SuccessResult(data: batch2CustomerResponseResult);
         }
 
         public IQueryable<Customer> GetAll(PaginationFilter paginationFilter)
