@@ -111,7 +111,6 @@ namespace DemoBackShopCore.Services
 
             IEnumerable<string> duplicateEmails = customerRequests.GroupBy(c => c.EmailAddress).Where(c => c.Count() > 1).Select(c => c.Key);
 
-            //Ele adiciona no failure certinho. Vi pelo Debug, então pode pular.
             if (duplicateEmails.Any())
             {
                 foreach (var customer in customerRequests)
@@ -131,11 +130,6 @@ namespace DemoBackShopCore.Services
             {
                 successTemporary.AddRange(collection: customerRequests);
             }
-
-            // Sobre essa validação, eu notei que eu estou refazendo o loop em toda a lista de customers
-            // Ou seja, se antes já tinha customers no failure, eu estou passando por eles denovo, o que eu não posso
-            // Tenho que começar esse loop ignorando os que já estão no failure
-            // Então eu preciso fazer uma lista de failure e success temporarias.
 
             List<Customer> newListCustomers = new List<Customer>();
 
