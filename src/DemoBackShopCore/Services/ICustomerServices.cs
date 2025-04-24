@@ -17,5 +17,6 @@ namespace DemoBackShopCore.Services
         public ServiceResult<Customer> Remove(int id);
         public CustomerResponseDTO GenerateCustomerResponseDTO(Customer customer);
         public List<CustomerResponseDTO> GenerateListCustomersResponseDTO(IQueryable<Customer> customers);
+        public Batch2PreparedForCustomerReponse GenerateBatch2PreparedCustomerResponseResult(Batch2CustomerResponseResult batch2CustomerResponseResult);
     }
 }

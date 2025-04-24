@@ -111,7 +111,7 @@ namespace DemoBackShopCore.Controllers
 
             var transaction = _dbContext.Database.BeginTransaction();
 
-            Batch2CustomerResponseResult responseResult;
+            Batch2PreparedForCustomerReponse responseResult;
 
             try
             {
@@ -125,7 +125,7 @@ namespace DemoBackShopCore.Controllers
                 await _dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                responseResult = result.Data;
+                responseResult = _services.GenerateBatch2PreparedCustomerResponseResult(batch2CustomerResponseResult: result.Data);
             }
             catch (Exception err)
             {

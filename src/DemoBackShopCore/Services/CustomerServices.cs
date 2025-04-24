@@ -351,5 +351,27 @@ namespace DemoBackShopCore.Services
             Customer customer = _repository.GetCustomerByEmail(emailAddress: emailAddress);
             return customer;
         }
+
+        public Batch2PreparedForCustomerReponse GenerateBatch2PreparedCustomerResponseResult(Batch2CustomerResponseResult batch2CustomerResponseResult)
+        {
+            Batch2PreparedForCustomerReponse batch2PreparedForCustomerReponse = new Batch2PreparedForCustomerReponse();
+            List<CustomerResponseDTO> listSuccessCustomersResponseDTOs = new List<CustomerResponseDTO>();
+
+            batch2PreparedForCustomerReponse.CustomersSuccessCount = batch2CustomerResponseResult.CustomersSuccessCount;
+            batch2PreparedForCustomerReponse.CustomersFailureCount = batch2CustomerResponseResult.CustomersFailureCount;
+
+            foreach (var successCustomer in batch2CustomerResponseResult.Success)
+            {
+                Customer customer = GetCustomerByEmail(emailAddress: successCustomer.EmailAddress);
+
+                listSuccessCustomersResponseDTOs.Add(item: GenerateCustomerResponseDTO(customer: customer));
+            }
+
+            batch2PreparedForCustomerReponse.Success = listSuccessCustomersResponseDTOs;
+
+            batch2PreparedForCustomerReponse.Failure = batch2CustomerResponseResult.Failure;
+
+            return batch2PreparedForCustomerReponse;
+        }
     }
 }
