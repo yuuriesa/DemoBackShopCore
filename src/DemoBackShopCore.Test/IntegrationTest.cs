@@ -27,13 +27,28 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     public async Task AddCustomer_ReturnsCreated()
     {
         //Arrange
+        AddressRequestDTO address = new AddressRequestDTO
+        {
+            ZipCode = "A",
+            Street = "A",
+            Number = 0,
+            Neighborhood = "A",
+            AddressComplement = "A",
+            City = "A",
+            Country = "A",
+            State = "A",
+        };
+
         CustomerRequestDTO request = new CustomerRequestDTO
         {
             FirstName = "Yuri",
             LastName = "Torres",
             EmailAddress = "yuriA@exemplo.com",
-            DateOfBirth = DateTime.UtcNow.AddDays(-20)
+            DateOfBirth = DateTime.UtcNow.AddDays(-20),
+            Addresses = new List<AddressRequestDTO>()
         };
+
+        request.Addresses.Add(item: address);
             
         string json = JsonConvert.SerializeObject(request);
         StringContent content = new StringContent
@@ -60,13 +75,28 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     public async Task AddCustomer_ReturnBadRequestFirstNameIcorrect()
     {
         //Arrange
+        AddressRequestDTO address = new AddressRequestDTO
+        {
+            ZipCode = "A",
+            Street = "A",
+            Number = 0,
+            Neighborhood = "A",
+            AddressComplement = "A",
+            City = "A",
+            Country = "A",
+            State = "A",
+        };
+
         CustomerRequestDTO request = new CustomerRequestDTO
         {
             FirstName = "YuriYuriYuriYuriYuriYuriYuriYuriYuriYuriYuri",
             LastName = "Torres",
             EmailAddress = "yuriB@exemplo.com",
-            DateOfBirth = DateTime.UtcNow.AddDays(-20)
+            DateOfBirth = DateTime.UtcNow.AddDays(-20),
+            Addresses = new List<AddressRequestDTO>()
         };
+
+        request.Addresses.Add(item: address);
             
         string json = JsonConvert.SerializeObject(request);
         StringContent content = new StringContent
