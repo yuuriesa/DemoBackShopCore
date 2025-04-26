@@ -216,13 +216,28 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     public async Task AddCustomers_ReturnsUnprocessableEntity()
     {
         //Arrange
+        AddressRequestDTO address = new AddressRequestDTO
+        {
+            ZipCode = "A",
+            Street = "A",
+            Number = 0,
+            Neighborhood = "A",
+            AddressComplement = "A",
+            City = "A",
+            Country = "A",
+            State = "A",
+        };
+
         CustomerRequestDTO request = new CustomerRequestDTO
         {
             FirstName = "Yuri",
             LastName = "Torres",
             EmailAddress = "yuriD@exemplo.com",
-            DateOfBirth = DateTime.UtcNow.AddDays(1)
+            DateOfBirth = DateTime.UtcNow.AddDays(1),
+            Addresses = new List<AddressRequestDTO>()
         };
+
+        request.Addresses.Add(item: address);
             
         string json = JsonConvert.SerializeObject(request);
         StringContent content = new StringContent
