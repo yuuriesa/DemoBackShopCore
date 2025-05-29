@@ -127,7 +127,6 @@ namespace DemoBackShopCore.Data
                     .HasColumnName("Name");
 
                     entity.Ignore(p => p.IsValid);
-                    //
                 }
             );
         }
