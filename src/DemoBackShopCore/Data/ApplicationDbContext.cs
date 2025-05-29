@@ -7,6 +7,7 @@ namespace DemoBackShopCore.Data
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options: options)
         {
@@ -105,6 +106,28 @@ namespace DemoBackShopCore.Data
                     entity.HasOne(a => a.Customer)
                     .WithMany(c => c.Addresses)
                     .HasForeignKey(c => c.CustomerId);
+                }
+            );
+
+            modelBuilder.Entity<Product>(entity =>
+                {
+                    entity.HasKey(p => p.ProductId);
+
+                    entity.Property(p => p.Code)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("Code");
+
+                    entity.HasIndex(p => p.Code)
+                    .IsUnique();
+
+                    entity.Property(p => p.Name)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("Name");
+
+                    entity.Ignore(p => p.IsValid);
+                    //
                 }
             );
         }
