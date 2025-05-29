@@ -14,6 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddScoped<ICustomerServices, CustomerServices>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRepositoryBase<Customer>, RepositoryBase<Customer>>();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
     {
