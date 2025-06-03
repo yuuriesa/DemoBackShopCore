@@ -25,9 +25,9 @@ namespace DemoBackShopCore.Services
         {
             Product productExists = _repository.GetByCode(code: productRequestDTO.Code);
 
-            if (productExists == null)
+            if (productExists != null)
             {
-                return ServiceResult<Product>.ErrorResult(message: DomainResponseMessages.ProductCodeExistsError, statusCode: 409);
+                return ServiceResult<Product>.ErrorResult(message: $"{DomainResponseMessages.ProductCodeExistsError}: {productRequestDTO.Code}", statusCode: 409);
             }
 
             Product newProduct = Product.RegisterNew(code: productRequestDTO.Code, name: productRequestDTO.Name);
