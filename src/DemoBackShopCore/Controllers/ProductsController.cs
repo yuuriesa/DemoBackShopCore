@@ -1,3 +1,4 @@
+using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
 using DemoBackShopCore.Utils;
@@ -41,6 +42,12 @@ namespace DemoBackShopCore.Controllers
             }
 
             return Ok(product);
+        }
+
+        [HttpPost]
+        public IActionResult Add(ProductRequestDTO productRequestDTO)
+        {
+            return Ok();
         }
     }
 }
