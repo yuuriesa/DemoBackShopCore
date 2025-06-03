@@ -26,6 +26,7 @@ namespace DemoBackShopCore.Utils
 
         //Product
         public const string ProductIdMustBeGreaterThanZeroError = "ProductId must be greater than zero";
+        public const string ProductNotFoundMessageError = "Product not found";
         public const string ProductFieldsAreInvalidError = "Code or Name fields are invalid, check the values available.";
     }
 }
