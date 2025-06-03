@@ -24,5 +24,10 @@ namespace DemoBackShopCore.Services
         {
             return _repository.GetAll(paginationFilter: paginationFilter);
         }
+
+        public Product GetById(int id)
+        {
+            return _repository.GetById(id: id);
+        }
     }
 }

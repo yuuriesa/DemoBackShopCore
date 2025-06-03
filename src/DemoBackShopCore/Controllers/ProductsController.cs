@@ -33,7 +33,14 @@ namespace DemoBackShopCore.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            return Ok();
+            Product? product = _services.GetById(id: id);
+
+            if (product == null)
+            {
+                return NotFound(DomainResponseMessages.ProductNotFoundMessageError);
+            }
+
+            return Ok(product);
         }
     }
 }
