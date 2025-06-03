@@ -10,7 +10,7 @@ namespace DemoBackShopCore.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductServices _services;
-        
+
         public ProductsController(IProductServices services)
         {
             _services = services;
@@ -28,6 +28,12 @@ namespace DemoBackShopCore.Controllers
             if (products.Count() == 0) return NoContent();
 
             return Ok(products);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            return Ok();
         }
     }
 }
