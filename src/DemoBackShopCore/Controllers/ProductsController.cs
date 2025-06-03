@@ -1,3 +1,4 @@
+using DemoBackShopCore.Data;
 using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
@@ -11,10 +12,12 @@ namespace DemoBackShopCore.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductServices _services;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ProductsController(IProductServices services)
+        public ProductsController(IProductServices services, ApplicationDbContext dbContext)
         {
             _services = services;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -47,7 +50,16 @@ namespace DemoBackShopCore.Controllers
         [HttpPost]
         public IActionResult Add(ProductRequestDTO productRequestDTO)
         {
-            return Ok();
+            ServiceResult<Product>? result = _services.Add(productRequestDTO: productRequestDTO);
+
+            if (!result.Success)
+            {
+                return StatusCode(statusCode: result.StatusCode, value: result.Message);
+            }
+
+            _dbContext.SaveChanges();
+
+            return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = result.Data.ProductId }, value: result.Data);
         }
     }
 }
