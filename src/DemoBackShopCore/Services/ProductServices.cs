@@ -23,7 +23,23 @@ namespace DemoBackShopCore.Services
 
         public ServiceResult<Product> Add(ProductRequestDTO productRequestDTO)
         {
-            throw new NotImplementedException();
+            Product productExists = _repository.GetByCode(code: productRequestDTO.Code);
+
+            if (productExists == null)
+            {
+                return ServiceResult<Product>.ErrorResult(message: DomainResponseMessages.ProductCodeExistsError, statusCode: 409);
+            }
+
+            Product newProduct = Product.RegisterNew(code: productRequestDTO.Code, name: productRequestDTO.Name);
+
+            if (!newProduct.IsValid)
+            {
+                return ServiceResult<Product>.ErrorResult(message: newProduct.ErrorMessageIfIsNotValid, statusCode: 422);
+            }
+
+            _repository.Add(entity: newProduct);
+
+            return ServiceResult<Product>.SuccessResult(data: newProduct, statusCode: 201);
         }
 
         public IQueryable<Product> GetAll(PaginationFilter paginationFilter)
