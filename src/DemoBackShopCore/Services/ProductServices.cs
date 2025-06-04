@@ -42,6 +42,19 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Product>.SuccessResult(data: newProduct, statusCode: 201);
         }
 
+        public ProductResponseDTO GenerateProductResponseDTO(Product product)
+        {
+            Product getProduct = GetByCode(code: product.Code);
+
+            ProductResponseDTO productResponse = new ProductResponseDTO
+            {
+                ProductId = getProduct.ProductId,
+                Code = getProduct.Code,
+                Name = getProduct.Name
+            };
+
+            return productResponse;
+        }
         public IQueryable<Product> GetAll(PaginationFilter paginationFilter)
         {
             return _repository.GetAll(paginationFilter: paginationFilter);
