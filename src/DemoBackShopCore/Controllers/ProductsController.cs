@@ -44,7 +44,9 @@ namespace DemoBackShopCore.Controllers
                 return NotFound(DomainResponseMessages.ProductNotFoundMessageError);
             }
 
-            return Ok(product);
+            ProductResponseDTO productResponse = _services.GenerateProductResponseDTO(product: product);
+
+            return Ok(productResponse);
         }
 
         [HttpPost]
