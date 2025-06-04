@@ -16,7 +16,7 @@ namespace DemoBackShopCore.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "Server=localhost;Database=DemoBackShopCore;User=SA;Password=Password123!;TrustServerCertificate=True";
+            var connectionString = "Server=localhost;Database=DemoBackShopCore;User=SA;Password=Password123!;TrustServerCertificate=True;MultipleActiveResultSets=true";
             optionsBuilder.UseSqlServer(connectionString: connectionString);
         }
 
