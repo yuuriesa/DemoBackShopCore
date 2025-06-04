@@ -10,6 +10,6 @@ namespace DemoBackShopCore.Services
         public Product GetById(int id);
         public Product GetByCode(string code);
         public ServiceResult<Product> Add(ProductRequestDTO productRequestDTO);
-
+        public ProductResponseDTO GenerateProductResponseDTO(Product product);
     }
 }
