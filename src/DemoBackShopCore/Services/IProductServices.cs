@@ -11,5 +11,6 @@ namespace DemoBackShopCore.Services
         public Product GetByCode(string code);
         public ServiceResult<Product> Add(ProductRequestDTO productRequestDTO);
         public ProductResponseDTO GenerateProductResponseDTO(Product product);
+        public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products);
     }
 }
