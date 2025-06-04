@@ -31,7 +31,9 @@ namespace DemoBackShopCore.Controllers
 
             if (products.Count() == 0) return NoContent();
 
-            return Ok(products);
+            List<ProductResponseDTO> listProductsResponses = _services.GenerateListProductResponseDTO(products: products);
+
+            return Ok(listProductsResponses);
         }
 
         [HttpGet("{id}")]
