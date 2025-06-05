@@ -69,7 +69,7 @@ namespace DemoBackShopCore.Controllers
         }
 
         [HttpPost("batch")]
-        public IActionResult AddBatch(List<ProductRequestDTO> productRequests)
+        public IActionResult AddBatch(IEnumerable<ProductRequestDTO> productRequests)
         {
             //adicionar todos os produtos da lista, apenas se todos estiverem OK
 
