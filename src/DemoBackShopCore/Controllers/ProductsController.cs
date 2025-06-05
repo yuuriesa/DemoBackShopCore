@@ -103,5 +103,24 @@ namespace DemoBackShopCore.Controllers
 
             return Ok(productsResponsesDTOs);
         }
+
+        [HttpPost("batch2")]
+        public async Task<IActionResult> AddBatch2(IEnumerable<ProductRequestDTO> productRequests)
+        {
+            if (productRequests.Count() == 0) return NoContent();
+
+            var transaction = _dbContext.Database.BeginTransaction();
+            try
+            {
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
+            return Ok();
+        }
     }
 }
