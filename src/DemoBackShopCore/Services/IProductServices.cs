@@ -15,5 +15,6 @@ namespace DemoBackShopCore.Services
         public IEnumerable<string> VerifyIfDuplicateCodes(IEnumerable<ProductRequestDTO> productsRequestsDTO);
         public ProductResponseDTO GenerateProductResponseDTO(Product product);
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products);
+        public Batch2PreparedForReponse GenerateBatch2PreparedResponseResult(Batch2ResponseResult batch2ResponseResult);
     }
 }
