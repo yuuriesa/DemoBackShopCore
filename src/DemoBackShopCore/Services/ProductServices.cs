@@ -44,6 +44,17 @@ namespace DemoBackShopCore.Services
 
         public async Task<ServiceResult<List<Product>>> AddBatch(IEnumerable<ProductRequestDTO> productsRequestsDTO)
         {
+            IEnumerable<string> duplicateCodes = VerifyIfDuplicateCodes(productsRequestsDTO: productsRequestsDTO);
+
+            if (duplicateCodes.Any())
+            {
+                return ServiceResult<List<Product>>.ErrorResult
+                (
+                    message: DomainResponseMessages.DuplicateCodeError,
+                    statusCode: 400
+                );
+            }
+
             List<Product> products = new List<Product>();
 
             foreach (var product in productsRequestsDTO)
@@ -117,6 +128,13 @@ namespace DemoBackShopCore.Services
         public Product GetById(int id)
         {
             return _repository.GetById(id: id);
+        }
+
+        public IEnumerable<string> VerifyIfDuplicateCodes(IEnumerable<ProductRequestDTO> productsRequestsDTO)
+        {
+            IEnumerable<string> duplicateCodes = productsRequestsDTO.GroupBy(c => c.Code).Where(c => c.Count() > 1).Select(c => c.Key);
+
+            return duplicateCodes;
         }
     }
 }
