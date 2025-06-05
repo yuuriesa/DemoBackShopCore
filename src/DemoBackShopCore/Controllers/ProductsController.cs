@@ -110,17 +110,24 @@ namespace DemoBackShopCore.Controllers
             if (productRequests.Count() == 0) return NoContent();
 
             var transaction = _dbContext.Database.BeginTransaction();
+            Batch2PreparedForReponse responseResult;
+
             try
             {
+                ServiceResult<Batch2ResponseResult>? result = await _services.AddBatch2(productsRequestsDTO: productRequests);
 
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                responseResult = _services.GenerateBatch2PreparedResponseResult(batch2ResponseResult: result.Data);
             }
-            catch (System.Exception)
+            catch (Exception err)
             {
-
-                throw;
+                await transaction.RollbackAsync();
+                throw new Exception(err.Message);
             }
 
-            return Ok();
+            return Ok(responseResult);
         }
     }
 }
