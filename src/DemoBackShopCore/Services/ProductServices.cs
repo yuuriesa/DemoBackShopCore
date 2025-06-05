@@ -83,7 +83,111 @@ namespace DemoBackShopCore.Services
 
         public async Task<ServiceResult<Batch2ResponseResult>> AddBatch2(IEnumerable<ProductRequestDTO> productsRequestsDTO)
         {
-            throw new NotImplementedException();
+            Batch2ResponseResult batch2ResponseResult = new Batch2ResponseResult();
+            List<ProductRequestDTO> successTemporary = new List<ProductRequestDTO>();
+            List<ProductRequestDTO> success = new List<ProductRequestDTO>();
+            List<ProductDTOWithMessageErrors> failure = new List<ProductDTOWithMessageErrors>();
+
+            IEnumerable<string> duplicateCodes = VerifyIfDuplicateCodes(productsRequestsDTO: productsRequestsDTO);
+
+            if (duplicateCodes.Any())
+            {
+                foreach (var product in productsRequestsDTO)
+                {
+                    if (duplicateCodes.Contains(value: product.Code))
+                    {
+                        ProductDTOWithMessageErrors productDTOWithMessageErrors = new ProductDTOWithMessageErrors();
+                        productDTOWithMessageErrors.Product = product;
+                        productDTOWithMessageErrors.FailureErrorsMessages.Add(item: DomainResponseMessages.DuplicateCodeError);
+
+                        failure.Add(item: productDTOWithMessageErrors);
+                        continue;
+                    }
+                    successTemporary.Add(item: product);
+                }
+            }
+            else
+            {
+                successTemporary.AddRange(collection: productsRequestsDTO);
+            }
+
+            List<Product> newProducts = new List<Product>();
+
+            foreach (var product in successTemporary)
+            {
+                Product productExists = _repository.GetByCode(code: product.Code);
+
+                if (productExists != null)
+                {
+                    ProductDTOWithMessageErrors productDTOWithMessageErrors = new ProductDTOWithMessageErrors();
+                    productDTOWithMessageErrors.Product = product;
+                    productDTOWithMessageErrors.FailureErrorsMessages.Add(item: $"{DomainResponseMessages.ProductCodeExistsError}: {product.Code}");
+
+                    failure.Add(item: productDTOWithMessageErrors);
+                    continue;
+                }
+
+                Product newProduct = Product.RegisterNew(code: product.Code, name: product.Name);
+
+                if (!newProduct.IsValid)
+                {
+                    ProductDTOWithMessageErrors productDTOWithMessageErrors = new ProductDTOWithMessageErrors();
+                    productDTOWithMessageErrors.Product = product;
+                    productDTOWithMessageErrors.FailureErrorsMessages.Add(item: newProduct.ErrorMessageIfIsNotValid);
+
+                    failure.Add(item: productDTOWithMessageErrors);
+                    continue;
+                }
+
+                newProducts.Add(item: newProduct);
+                success.Add(item: product);
+            }
+
+            _repository.AddRange(entities: newProducts);
+            batch2ResponseResult.SuccessCount = success.Count;
+            batch2ResponseResult.FailureCount = failure.Count;
+
+            if (success.Count == 0)
+            {
+                batch2ResponseResult.Success = null;
+            }
+            else
+            {
+                batch2ResponseResult.Success.AddRange(success);
+            }
+
+            if (failure.Count == 0)
+            {
+                batch2ResponseResult.Failure = null;
+            }
+            else
+            {
+                batch2ResponseResult.Failure.AddRange(failure);
+            }
+
+            return ServiceResult<Batch2ResponseResult>.SuccessResult(data: batch2ResponseResult);
+        }
+
+        public Batch2PreparedForReponse GenerateBatch2PreparedResponseResult(Batch2ResponseResult batch2ResponseResult)
+        {
+            Batch2PreparedForReponse batch2PreparedForReponse = new Batch2PreparedForReponse();
+            List<ProductResponseDTO> listSuccessProductsResponseDTOs = new List<ProductResponseDTO>();
+
+            batch2PreparedForReponse.SuccessCount = batch2ResponseResult.SuccessCount;
+            batch2PreparedForReponse.FailureCount = batch2ResponseResult.FailureCount;
+
+            foreach (var successCustomer in batch2ResponseResult.Success)
+            {
+                Product product = GetByCode(code: successCustomer.Code);
+
+                listSuccessProductsResponseDTOs.Add(item: GenerateProductResponseDTO(product: product));
+            }
+
+            batch2PreparedForReponse.Success = listSuccessProductsResponseDTOs;
+
+            batch2PreparedForReponse.Failure = batch2ResponseResult.Failure;
+
+            return batch2PreparedForReponse;
         }
 
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products)
