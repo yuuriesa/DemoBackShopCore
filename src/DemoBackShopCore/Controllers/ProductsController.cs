@@ -69,11 +69,39 @@ namespace DemoBackShopCore.Controllers
         }
 
         [HttpPost("batch")]
-        public IActionResult AddBatch(IEnumerable<ProductRequestDTO> productRequests)
+        public async Task<IActionResult> AddBatch(IEnumerable<ProductRequestDTO> productRequests)
         {
             //adicionar todos os produtos da lista, apenas se todos estiverem OK
+            if (productRequests.Count() == 0) return NoContent();
 
-            return Ok();
+            var transaction = _dbContext.Database.BeginTransaction();
+            List<ProductResponseDTO> productsResponsesDTOs = new List<ProductResponseDTO>();
+
+            try
+            {
+                ServiceResult<List<Product>> result = await _services.AddBatch(productsRequestsDTO: productRequests);
+
+                if (!result.Success)
+                {
+                    return StatusCode(statusCode: result.StatusCode, value: result.Message);
+                }
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                foreach (var item in result.Data)
+                {
+                    productsResponsesDTOs.Add(item: _services.GenerateProductResponseDTO(product: item));
+                }
+            }
+            catch (Exception err)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(err.Message);
+            }
+
+
+            return Ok(productsResponsesDTOs);
         }
     }
 }
