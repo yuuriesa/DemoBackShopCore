@@ -30,6 +30,7 @@ namespace DemoBackShopCore.Utils
         public const string CodeIsRequired = "Code Is Required";
         public const string ProductCodeExistsError = "this Code exists";
         public const string ProductNameIsRequired = "ProductName Is Required";
+        public const string DuplicateCodeError = "found duplicate Codes";
         public const string ProductFieldsAreInvalidError = "Code or Name fields are invalid, check the values available.";
     }
 }
