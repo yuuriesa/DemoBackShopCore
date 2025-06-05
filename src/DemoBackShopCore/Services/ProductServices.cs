@@ -42,6 +42,11 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Product>.SuccessResult(data: newProduct, statusCode: 201);
         }
 
+        public Task<ServiceResult<Product>> AddBatch(IEnumerable<ProductRequestDTO> productRequestDTO)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products)
         {
             List<ProductResponseDTO> listProductsResponses = new List<ProductResponseDTO>();
