@@ -10,7 +10,7 @@ namespace DemoBackShopCore.Services
         public Product GetById(int id);
         public Product GetByCode(string code);
         public ServiceResult<Product> Add(ProductRequestDTO productRequestDTO);
-        public Task<ServiceResult<Product>> AddBatch(IEnumerable<ProductRequestDTO> productRequestDTO);
+        public Task<ServiceResult<List<Product>>> AddBatch(IEnumerable<ProductRequestDTO> productsRequestsDTO);
         public ProductResponseDTO GenerateProductResponseDTO(Product product);
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products);
     }
