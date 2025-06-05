@@ -9,7 +9,7 @@ namespace DemoBackShopCore.Utils
         // both will have their dates without the times that are standard.
         public int SuccessCount { get; set; }
         public int FailureCount { get; set; }
-        public List<ProductRequestDTO>? Success { get; set; } = new List<ProductRequestDTO>();
+        public List<ProductResponseDTO>? Success { get; set; } = new List<ProductResponseDTO>();
         public List<ProductDTOWithMessageErrors>? Failure { get; set; } = new List<ProductDTOWithMessageErrors>();
     }
 }
