@@ -168,6 +168,28 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Batch2ResponseResult>.SuccessResult(data: batch2ResponseResult);
         }
 
+        public Batch2PreparedForReponse GenerateBatch2PreparedResponseResult(Batch2ResponseResult batch2ResponseResult)
+        {
+            Batch2PreparedForReponse batch2PreparedForReponse = new Batch2PreparedForReponse();
+            List<ProductResponseDTO> listSuccessProductsResponseDTOs = new List<ProductResponseDTO>();
+
+            batch2PreparedForReponse.SuccessCount = batch2ResponseResult.SuccessCount;
+            batch2PreparedForReponse.FailureCount = batch2ResponseResult.FailureCount;
+
+            foreach (var successCustomer in batch2ResponseResult.Success)
+            {
+                Product product = GetByCode(code: successCustomer.Code);
+
+                listSuccessProductsResponseDTOs.Add(item: GenerateProductResponseDTO(product: product));
+            }
+
+            batch2PreparedForReponse.Success = listSuccessProductsResponseDTOs;
+
+            batch2PreparedForReponse.Failure = batch2ResponseResult.Failure;
+
+            return batch2PreparedForReponse;
+        }
+
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products)
         {
             List<ProductResponseDTO> listProductsResponses = new List<ProductResponseDTO>();
