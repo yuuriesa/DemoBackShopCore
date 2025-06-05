@@ -11,6 +11,7 @@ namespace DemoBackShopCore.Services
         public Product GetByCode(string code);
         public ServiceResult<Product> Add(ProductRequestDTO productRequestDTO);
         public Task<ServiceResult<List<Product>>> AddBatch(IEnumerable<ProductRequestDTO> productsRequestsDTO);
+        public Task<ServiceResult<Batch2ResponseResult>> AddBatch2(IEnumerable<ProductRequestDTO> productsRequestsDTO);
         public IEnumerable<string> VerifyIfDuplicateCodes(IEnumerable<ProductRequestDTO> productsRequestsDTO);
         public ProductResponseDTO GenerateProductResponseDTO(Product product);
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products);
