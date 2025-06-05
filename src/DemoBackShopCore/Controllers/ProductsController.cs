@@ -67,5 +67,13 @@ namespace DemoBackShopCore.Controllers
 
             return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = result.Data.ProductId }, value: productResponse);
         }
+
+        [HttpPost("batch")]
+        public IActionResult AddBatch(List<ProductRequestDTO> productRequests)
+        {
+            //adicionar todos os produtos da lista, apenas se todos estiverem OK
+
+            return Ok();
+        }
     }
 }
