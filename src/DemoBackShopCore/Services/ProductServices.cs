@@ -42,9 +42,32 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Product>.SuccessResult(data: newProduct, statusCode: 201);
         }
 
-        public Task<ServiceResult<Product>> AddBatch(IEnumerable<ProductRequestDTO> productRequestDTO)
+        public async Task<ServiceResult<List<Product>>> AddBatch(IEnumerable<ProductRequestDTO> productsRequestsDTO)
         {
-            throw new NotImplementedException();
+            List<Product> products = new List<Product>();
+
+            foreach (var product in productsRequestsDTO)
+            {
+                Product productExists = _repository.GetByCode(code: product.Code);
+
+                if (productExists != null)
+                {
+                    return ServiceResult<List<Product>>.ErrorResult(message: $"{DomainResponseMessages.ProductCodeExistsError}: {product.Code}", statusCode: 409);
+                }
+
+                Product newProduct = Product.RegisterNew(code: product.Code, name: product.Name);
+
+                if (!newProduct.IsValid)
+                {
+                    return ServiceResult<List<Product>>.ErrorResult(message: newProduct.ErrorMessageIfIsNotValid, statusCode: 422);
+                }
+
+                products.Add(item: newProduct);
+            }
+
+            _repository.AddRange(entities: products);
+
+            return ServiceResult<List<Product>>.SuccessResult(data: products);
         }
 
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products)
