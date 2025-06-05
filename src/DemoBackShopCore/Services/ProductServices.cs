@@ -81,6 +81,11 @@ namespace DemoBackShopCore.Services
             return ServiceResult<List<Product>>.SuccessResult(data: products);
         }
 
+        public async Task<ServiceResult<Batch2ResponseResult>> AddBatch2(IEnumerable<ProductRequestDTO> productsRequestsDTO)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<ProductResponseDTO> GenerateListProductResponseDTO(IQueryable<Product> products)
         {
             List<ProductResponseDTO> listProductsResponses = new List<ProductResponseDTO>();
