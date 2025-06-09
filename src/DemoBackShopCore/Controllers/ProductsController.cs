@@ -130,5 +130,22 @@ namespace DemoBackShopCore.Controllers
 
             return Ok(responseResult);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, ProductRequestDTO productRequestDTOforUpdate)
+        {
+            ServiceResult<Product> result = _services.Update(id: id, productRequestDTOforUpdate: productRequestDTOforUpdate);
+
+            if (!result.Success)
+            {
+                return StatusCode(statusCode: result.StatusCode, value: result.Message);
+            }
+
+            _dbContext.SaveChanges();
+
+            ProductResponseDTO productResponse = _services.GenerateProductResponseDTO(product: result.Data);
+
+            return Ok(productResponse);
+        }
     }
 }
