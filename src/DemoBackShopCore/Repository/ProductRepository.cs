@@ -1,5 +1,6 @@
 using DemoBackShopCore.Data;
 using DemoBackShopCore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Repository
 {
@@ -13,7 +14,7 @@ namespace DemoBackShopCore.Repository
 
         public Product GetByCode(string code)
         {
-            Product? product = _dbContext.Products.FirstOrDefault(p => p.Code == code);
+            Product? product = _dbContext.Products.AsNoTracking().FirstOrDefault(p => p.Code == code);
 
             if (product == null)
             {
