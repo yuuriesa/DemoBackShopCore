@@ -176,14 +176,24 @@ namespace DemoBackShopCore.Services
             batch2PreparedForReponse.SuccessCount = batch2ResponseResult.SuccessCount;
             batch2PreparedForReponse.FailureCount = batch2ResponseResult.FailureCount;
 
-            foreach (var successCustomer in batch2ResponseResult.Success)
+            if (batch2ResponseResult.Success != null)
             {
-                Product product = GetByCode(code: successCustomer.Code);
+                foreach (var successCustomer in batch2ResponseResult.Success)
+                {
+                    Product product = GetByCode(code: successCustomer.Code);
 
-                listSuccessProductsResponseDTOs.Add(item: GenerateProductResponseDTO(product: product));
+                    listSuccessProductsResponseDTOs.Add(item: GenerateProductResponseDTO(product: product));
+                }
             }
 
-            batch2PreparedForReponse.Success = listSuccessProductsResponseDTOs;
+            if (listSuccessProductsResponseDTOs.Count > 0)
+            {
+                batch2PreparedForReponse.Success = listSuccessProductsResponseDTOs;
+            }
+            else
+            {
+                batch2PreparedForReponse.Success = null;
+            }
 
             batch2PreparedForReponse.Failure = batch2ResponseResult.Failure;
 
