@@ -95,10 +95,10 @@ namespace DemoBackShopCore.Controllers
                     productsResponsesDTOs.Add(item: _services.GenerateProductResponseDTO(product: item));
                 }
             }
-            catch (Exception err)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
-                throw new Exception(err.Message);
+                throw;
             }
 
 
@@ -122,10 +122,10 @@ namespace DemoBackShopCore.Controllers
 
                 responseResult = _services.GenerateBatch2PreparedResponseResult(batch2ResponseResult: result.Data);
             }
-            catch (Exception err)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
-                throw new Exception(err.Message);
+                throw;
             }
 
             return Ok(responseResult);
