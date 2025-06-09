@@ -4,6 +4,7 @@ using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
 using DemoBackShopCore.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Controllers
 {
@@ -74,7 +75,7 @@ namespace DemoBackShopCore.Controllers
             //adicionar todos os produtos da lista, apenas se todos estiverem OK
             if (productRequests.Count() == 0) return NoContent();
 
-            var transaction = _dbContext.Database.BeginTransaction();
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
             List<ProductResponseDTO> productsResponsesDTOs = new List<ProductResponseDTO>();
 
             try
@@ -109,8 +110,8 @@ namespace DemoBackShopCore.Controllers
         {
             if (productRequests.Count() == 0) return NoContent();
 
-            var transaction = _dbContext.Database.BeginTransaction();
-            Batch2PreparedForReponse responseResult;
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            Batch2PreparedForReponse responseResult = new Batch2PreparedForReponse();
 
             try
             {
