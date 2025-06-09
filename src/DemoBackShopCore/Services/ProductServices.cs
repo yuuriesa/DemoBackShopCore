@@ -3,6 +3,7 @@ using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Repository;
 using DemoBackShopCore.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Services
 {
@@ -247,6 +248,54 @@ namespace DemoBackShopCore.Services
         public Product GetById(int id)
         {
             return _repository.GetById(id: id);
+        }
+
+        public ServiceResult<Product> Update(int id, ProductRequestDTO productRequestDTOforUpdate)
+        {
+            Product? getProductById = _dbContext
+            .Products
+            .AsNoTracking()
+            .FirstOrDefault(p => p.ProductId == id);
+
+            if (getProductById == null)
+            {
+                return ServiceResult<Product>.ErrorResult
+                (
+                    message: DomainResponseMessages.ProductNotFoundMessageError,
+                    statusCode: 404
+                );
+            }
+
+            Product codeProductExists = GetByCode(code: productRequestDTOforUpdate.Code);
+
+            if (codeProductExists != null && codeProductExists.ProductId != id)
+            {
+                return ServiceResult<Product>.ErrorResult
+                (
+                    message: DomainResponseMessages.ProductCodeExistsError,
+                    statusCode: 409
+                );
+            }
+
+            Product updatedProduct = Product.SetExistingInfo
+            (
+                productId: getProductById.ProductId,
+                code: productRequestDTOforUpdate.Code,
+                name: productRequestDTOforUpdate.Name
+            );
+
+            if (!updatedProduct.IsValid)
+            {
+                return ServiceResult<Product>.ErrorResult
+                (
+                    message: updatedProduct.ErrorMessageIfIsNotValid,
+                    statusCode: 422
+                );
+            }
+
+            _repository.Update(id: id, entity: updatedProduct);
+
+            return ServiceResult<Product>.SuccessResult(data: updatedProduct);
         }
 
         public IEnumerable<string> VerifyIfDuplicateCodes(IEnumerable<ProductRequestDTO> productsRequestsDTO)
