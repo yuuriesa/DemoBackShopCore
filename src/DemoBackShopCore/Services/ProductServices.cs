@@ -169,6 +169,20 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Batch2ResponseResult>.SuccessResult(data: batch2ResponseResult);
         }
 
+        public ServiceResult<Product> Delete(int id)
+        {
+            Product productExists = GetById(id: id);
+
+            if (productExists == null)
+            {
+                return ServiceResult<Product>.ErrorResult(message: DomainResponseMessages.ProductNotFoundMessageError, statusCode: 404);
+            }
+
+            _repository.Remove(id: id);
+
+            return ServiceResult<Product>.SuccessResult(data: productExists);
+        }
+
         public Batch2PreparedForReponse GenerateBatch2PreparedResponseResult(Batch2ResponseResult batch2ResponseResult)
         {
             Batch2PreparedForReponse batch2PreparedForReponse = new Batch2PreparedForReponse();
