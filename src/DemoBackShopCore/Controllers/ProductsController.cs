@@ -147,5 +147,17 @@ namespace DemoBackShopCore.Controllers
 
             return Ok(productResponse);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            ServiceResult<Product> result = _services.Delete(id: id);
+
+            if (!result.Success) return StatusCode(statusCode: result.StatusCode, value: result.Message);
+
+            _dbContext.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
