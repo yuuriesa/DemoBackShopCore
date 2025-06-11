@@ -252,7 +252,7 @@ namespace DemoBackShopCore.Services
 
         public ServiceResult<Product> Update(int id, ProductRequestDTO productRequestDTOforUpdate)
         {
-            Product? getProductById = _dbContext
+            Product getProductById = _dbContext
             .Products
             .AsNoTracking()
             .FirstOrDefault(p => p.ProductId == id);
@@ -279,7 +279,7 @@ namespace DemoBackShopCore.Services
 
             Product updatedProduct = Product.SetExistingInfo
             (
-                productId: getProductById.ProductId,
+                productId: id,
                 code: productRequestDTOforUpdate.Code,
                 name: productRequestDTOforUpdate.Name
             );
