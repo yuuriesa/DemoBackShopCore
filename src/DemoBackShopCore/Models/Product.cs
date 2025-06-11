@@ -30,6 +30,7 @@ namespace DemoBackShopCore.Models
         )
         {
             _productId = productId;
+            ProductId = productId;
             _code = code;
             _name = name;
 
