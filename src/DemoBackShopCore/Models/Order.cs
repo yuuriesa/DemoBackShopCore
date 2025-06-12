@@ -64,6 +64,7 @@ namespace DemoBackShopCore.Models
             order.SetOrderDate(orderDate: orderDate);
             order.SetOrderCustomerId(customerId: customerId);
             order.SetOrderItems(items: items);
+            order.Validate();
 
             return order;
         }
@@ -93,25 +94,62 @@ namespace DemoBackShopCore.Models
 
 
         //private methods
+        private void SetOrderId(int orderId)
+        {
+            if (orderId <= 0)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
+
+            OrderId = orderId;
+        }
         private void SetOrderNumber(string orderNumber)
         {
+            if (orderNumber.Length < 1)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
 
+            _orderNumber = orderNumber;
         }
         private void SetOrderDate(DateTime orderDate)
         {
-            
+            DateTime dateNow = DateTime.UtcNow;
+
+            if (dateNow.ToUniversalTime().Date > dateNow.Date)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
+
+            _orderDate = orderDate;
         }
         private void SetOrderCustomerId(int customerId)
         {
-            
+            if (customerId <= 0)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
+
+            _customerId = customerId;
+        }
+        private void SetTotalOrderValue(List<Item> items)
+        {
+            // var totalValue = from item in items select item.TotalValue;
+            // _totalOrderValue = totalValue.Sum();
         }
         private void SetOrderItems(List<Item> items)
         {
-            
+            if (items.Count == 0)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
+
+            Items = items;
         }
         private void Validate()
         {
-
+            DateTime dateNow = DateTime.UtcNow;
+            IsValid = _orderNumber.Length > 1 && _orderDate.ToUniversalTime().Date <= dateNow.Date && _totalOrderValue > 0 && _customerId > 0 && Items.Count > 0;
         }
     }
 }
