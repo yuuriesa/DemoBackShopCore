@@ -29,5 +29,89 @@ namespace DemoBackShopCore.Models
         {
 
         }
+        private Order
+        (
+            int orderId,
+            string orderNumber,
+            DateTime orderDate,
+            decimal totalOrderValue,
+            int customerId,
+            List<Item> items
+        )
+        {
+            OrderId = orderId;
+            _orderNumber = orderNumber;
+            _orderDate = orderDate;
+            _totalOrderValue = totalOrderValue;
+            _customerId = customerId;
+            Items = items;
+
+            Validate();
+        }
+
+        //public methods
+        public Order RegisterNew
+        (
+            string orderNumber,
+            DateTime orderDate,
+            int customerId,
+            List<Item> items
+        )
+        {
+            Order order = new Order();
+
+            order.SetOrderNumber(orderNumber: orderNumber);
+            order.SetOrderDate(orderDate: orderDate);
+            order.SetOrderCustomerId(customerId: customerId);
+            order.SetOrderItems(items: items);
+
+            return order;
+        }
+
+        public Order SetExistingInfo
+        (
+            int orderId,
+            string orderNumber,
+            DateTime orderDate,
+            decimal totalOrderValue,
+            int customerId,
+            List<Item> items
+        )
+        {
+            Order order = new Order
+            (
+                orderId: orderId,
+                orderNumber: orderNumber,
+                orderDate: orderDate,
+                totalOrderValue: totalOrderValue,
+                customerId: customerId,
+                items: items
+            );
+
+            return order;
+        }
+
+
+        //private methods
+        private void SetOrderNumber(string orderNumber)
+        {
+
+        }
+        private void SetOrderDate(DateTime orderDate)
+        {
+            
+        }
+        private void SetOrderCustomerId(int customerId)
+        {
+            
+        }
+        private void SetOrderItems(List<Item> items)
+        {
+            
+        }
+        private void Validate()
+        {
+
+        }
     }
 }
