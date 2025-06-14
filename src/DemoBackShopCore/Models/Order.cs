@@ -108,7 +108,7 @@ namespace DemoBackShopCore.Models
         {
             if (orderNumber.Length < 1)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.OrderNumberMustBeGreaterThanZeroError;
             }
 
             _orderNumber = orderNumber;
