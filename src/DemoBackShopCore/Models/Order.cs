@@ -119,7 +119,7 @@ namespace DemoBackShopCore.Models
 
             if (dateNow.ToUniversalTime().Date > dateNow.Date)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.DateOfOrderError;
             }
 
             _orderDate = orderDate;
