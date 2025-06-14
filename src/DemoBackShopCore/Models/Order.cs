@@ -128,7 +128,7 @@ namespace DemoBackShopCore.Models
         {
             if (customerId <= 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.CustomerCustomerIdMustBeGreaterThanZeroError;
             }
 
             _customerId = customerId;
@@ -142,7 +142,7 @@ namespace DemoBackShopCore.Models
         {
             if (items.Count == 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.TheOrderMustHaveAtLeastOneItem;
             }
 
             Items = items;
