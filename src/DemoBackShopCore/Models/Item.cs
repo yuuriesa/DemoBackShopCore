@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.Models
 {
@@ -93,7 +94,7 @@ namespace DemoBackShopCore.Models
         {
             if (unitValue <= 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.TheUnitValueMustBeGreaterThanZero;
             }
 
             _unitValue = unitValue;

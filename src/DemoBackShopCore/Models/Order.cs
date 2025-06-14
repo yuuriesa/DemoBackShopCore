@@ -65,6 +65,7 @@ namespace DemoBackShopCore.Models
             order.SetOrderDate(orderDate: orderDate);
             order.SetOrderCustomerId(customerId: customerId);
             order.SetOrderItems(items: items);
+            order.SetTotalOrderValue(items: items);
             order.Validate();
 
             return order;
@@ -135,8 +136,8 @@ namespace DemoBackShopCore.Models
         }
         private void SetTotalOrderValue(List<Item> items)
         {
-            // var totalValue = from item in items select item.TotalValue;
-            // _totalOrderValue = totalValue.Sum();
+            IEnumerable<decimal> totalValue = from item in items select item.TotalValue;
+            _totalOrderValue = totalValue.Sum();
         }
         private void SetOrderItems(List<Item> items)
         {
