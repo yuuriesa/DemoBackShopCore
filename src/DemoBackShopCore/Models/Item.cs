@@ -22,5 +22,26 @@ namespace DemoBackShopCore.Models
 
         //properties for validation
         public bool IsValid { get; private set; }
+
+        //constructors
+        //private constructor
+        private Item() { }
+        private Item
+        (
+            int itemId,
+            Product product,
+            int orderId,
+            int quantityOfItems,
+            decimal unitValue,
+            string code
+        )
+        {
+            ItemId = itemId;
+            ProductId = product.ProductId;
+            OrderId = orderId;
+            _quantityOfItems = quantityOfItems;
+            _unitValue = unitValue;
+            Code = code;
+        }
     }
 }
