@@ -54,11 +54,11 @@ namespace DemoBackShopCore.Models
         )
         {
             Item item = new Item();
-            // item.SetProduct(product: product);
-            // item.SetUnitValue(unitValue: unitValue);
-            // item.SetQuantityOfItems(quantityOfItems: quantityOfItems);
-            // item.SetTotalValue();
-            // item.Validate();
+            item.SetProduct(product: product);
+            item.SetUnitValue(unitValue: unitValue);
+            item.SetQuantityOfItems(quantityOfItems: quantityOfItems);
+            item.SetTotalValue();
+            item.Validate();
 
             return item;
         }
@@ -83,7 +83,7 @@ namespace DemoBackShopCore.Models
                 code: code
             );
 
-            // item.Validate();
+            item.Validate();
 
             return item;
         }
