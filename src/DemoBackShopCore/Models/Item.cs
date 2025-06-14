@@ -104,7 +104,7 @@ namespace DemoBackShopCore.Models
         {
             if (quantityOfItems <= 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.TheQuantityOfItensMustBeGreaterThanZero;
             }
 
             _quantityOfItems = quantityOfItems;
