@@ -61,5 +61,30 @@ namespace DemoBackShopCore.Models
 
             return item;
         }
+
+        public static Item SetExistingInfo
+        (
+            int itemId,
+            Product product,
+            int orderId,
+            int quantityOfItems,
+            decimal unitValue,
+            string code
+        )
+        {
+            Item item = new Item
+            (
+                itemId: itemId,
+                product: product,
+                orderId: orderId,
+                quantityOfItems: quantityOfItems,
+                unitValue: unitValue,
+                code: code
+            );
+
+            // item.Validate();
+
+            return item;
+        }
     }
 }
