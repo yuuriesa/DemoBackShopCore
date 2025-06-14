@@ -35,5 +35,8 @@ namespace DemoBackShopCore.Utils
 
         //Order
         public const string OrderIdMustBeGreaterThanZeroError = "OrderId must be greater than zero";
+        public const string OrderNumberMustBeGreaterThanZeroError = "OrderNumber must be greater than zero";
+        public const string DateOfOrderError = "You cannot put the date with the day after today.";
+        public const string TheOrderMustHaveAtLeastOneItem = "The order must have at least one item";
     }
 }

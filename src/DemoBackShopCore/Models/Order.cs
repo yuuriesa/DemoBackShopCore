@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.Models
 {
@@ -98,7 +99,7 @@ namespace DemoBackShopCore.Models
         {
             if (orderId <= 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.OrderIdMustBeGreaterThanZeroError;
             }
 
             OrderId = orderId;
@@ -107,7 +108,7 @@ namespace DemoBackShopCore.Models
         {
             if (orderNumber.Length < 1)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.OrderNumberMustBeGreaterThanZeroError;
             }
 
             _orderNumber = orderNumber;
@@ -118,7 +119,7 @@ namespace DemoBackShopCore.Models
 
             if (dateNow.ToUniversalTime().Date > dateNow.Date)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.DateOfOrderError;
             }
 
             _orderDate = orderDate;
@@ -127,7 +128,7 @@ namespace DemoBackShopCore.Models
         {
             if (customerId <= 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.CustomerCustomerIdMustBeGreaterThanZeroError;
             }
 
             _customerId = customerId;
@@ -141,7 +142,7 @@ namespace DemoBackShopCore.Models
         {
             if (items.Count == 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.TheOrderMustHaveAtLeastOneItem;
             }
 
             Items = items;
