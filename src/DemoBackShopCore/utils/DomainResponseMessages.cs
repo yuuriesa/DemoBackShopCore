@@ -16,8 +16,8 @@ namespace DemoBackShopCore.Utils
         public const string CustomerEmailExistsError = "this email exists";
         public const string DuplicateEmailError = "found duplicate emails";
         public const string CustomerPaginationError = "The pagination parameters 'pageSize' and 'pageNumber' must be positive numbers. Check the values ​​provided.";
-    
-    
+
+
         //Address
         public const string MaximumOf20CharactersError = "Must have a maximum of 20 characters";
         public const string MaximumOf100CharactersError = "Must have a maximum of 100 characters";
@@ -32,5 +32,8 @@ namespace DemoBackShopCore.Utils
         public const string ProductNameIsRequired = "ProductName Is Required";
         public const string DuplicateCodeError = "found duplicate Codes";
         public const string ProductFieldsAreInvalidError = "Code or Name fields are invalid, check the values available.";
+
+        //Order
+        public const string OrderIdMustBeGreaterThanZeroError = "OrderId must be greater than zero";
     }
 }
