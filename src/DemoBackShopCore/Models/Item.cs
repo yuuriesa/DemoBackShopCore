@@ -43,5 +43,23 @@ namespace DemoBackShopCore.Models
             _unitValue = unitValue;
             Code = code;
         }
+
+        //public methods
+        public static Item RegisterNew
+        (
+            Product product,
+            decimal unitValue,
+            int quantityOfItems
+        )
+        {
+            Item item = new Item();
+            // item.SetProduct(product: product);
+            // item.SetUnitValue(unitValue: unitValue);
+            // item.SetQuantityOfItems(quantityOfItems: quantityOfItems);
+            // item.SetTotalValue();
+            // item.Validate();
+
+            return item;
+        }
     }
 }
