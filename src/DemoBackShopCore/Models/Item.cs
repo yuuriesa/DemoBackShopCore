@@ -21,7 +21,8 @@ namespace DemoBackShopCore.Models
         public string Code { get; private set; }
 
         //properties for validation
-        public bool IsValid { get; private set; }
+        public bool IsValid { get; private set; } = false;
+        public string ErrorMessageIfIsNotValid { get; private set; } = string.Empty;
 
         //constructors
         //private constructor
@@ -85,6 +86,43 @@ namespace DemoBackShopCore.Models
             // item.Validate();
 
             return item;
+        }
+
+        //private methods
+        private void SetUnitValue(decimal unitValue)
+        {
+            if (unitValue <= 0)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
+
+            _unitValue = unitValue;
+        }
+
+        private void SetQuantityOfItems(int quantityOfItems)
+        {
+            if (quantityOfItems <= 0)
+            {
+                ErrorMessageIfIsNotValid = "";
+            }
+
+            _quantityOfItems = quantityOfItems;
+        }
+
+        private void SetProduct(Product product)
+        {
+            ProductId = product.ProductId;
+            Code = product.Code;
+        }
+
+        private void SetTotalValue()
+        {
+            TotalValue = _unitValue * _quantityOfItems;
+        }
+
+        private void Validate()
+        {
+            IsValid = _unitValue > 0 && _quantityOfItems > 0;
         }
     }
 }
