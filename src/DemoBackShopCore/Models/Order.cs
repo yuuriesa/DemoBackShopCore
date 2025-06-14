@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.Models
 {
@@ -98,7 +99,7 @@ namespace DemoBackShopCore.Models
         {
             if (orderId <= 0)
             {
-                ErrorMessageIfIsNotValid = "";
+                ErrorMessageIfIsNotValid = DomainResponseMessages.OrderIdMustBeGreaterThanZeroError;
             }
 
             OrderId = orderId;
