@@ -65,6 +65,7 @@ namespace DemoBackShopCore.Models
             order.SetOrderDate(orderDate: orderDate);
             order.SetOrderCustomerId(customerId: customerId);
             order.SetOrderItems(items: items);
+            order.SetTotalOrderValue(items: items);
             order.Validate();
 
             return order;
