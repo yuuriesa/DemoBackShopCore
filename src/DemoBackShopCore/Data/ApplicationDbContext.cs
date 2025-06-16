@@ -140,22 +140,22 @@ namespace DemoBackShopCore.Data
                 {
                     entity.HasKey(o => o.OrderId);
 
-                    entity.Property(o => o.OrderNumber)
+                    entity.Property<string>("_orderNumber")
                     .IsRequired()
                     .HasColumnName("OrderNumber");
 
-                    entity.HasIndex(o => o.OrderNumber)
+                    entity.HasIndex("_orderNumber")
                     .IsUnique();
 
-                    entity.Property(o => o.OrderDate)
+                    entity.Property<DateTime>("_orderDate")
                     .IsRequired()
-                    .HasColumnName("OrderDate")
-                    .HasField("_orderDate")
-                    .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
+                    .HasColumnName("OrderDate");
+                    //.HasDefaultValue(DateTime.Now);
 
-                    entity.Property(o => o.TotalOrderValue)
+                    entity.Property("_totalOrderValue")
                     .IsRequired()
                     .HasColumnName("TotalOrderValue");
+                    
 
                     entity.HasOne(a => a.Customer)
                     .WithMany(c => c.Orders)
@@ -175,11 +175,11 @@ namespace DemoBackShopCore.Data
                 {
                     entity.HasKey(i => i.ItemId);
 
-                    entity.Property(i => i.QuantityOfItems)
+                    entity.Property("_quantityOfItems")
                     .IsRequired()
                     .HasColumnName("QuantityOfItems");
 
-                    entity.Property(i => i.UnitValue)
+                    entity.Property("_unitValue")
                     .IsRequired()
                     .HasColumnName("UnitValue");
 
