@@ -57,6 +57,11 @@ namespace DemoBackShopCore.Data
                 .HasForeignKey(c => c.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasMany(c => c.Orders)
+                .WithOne(o => o.Customer)
+                .HasForeignKey(c => c.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
                 entity.Ignore(c => c.ErrorMessageIfIsNotValid);
             });
 
