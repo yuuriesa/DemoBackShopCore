@@ -170,6 +170,31 @@ namespace DemoBackShopCore.Data
                     entity.Ignore(p => p.ErrorMessageIfIsNotValid);
                 }
             );
+
+            modelBuilder.Entity<Item>(entity =>
+                {
+                    entity.HasKey(i => i.ItemId);
+
+                    entity.Property(i => i.QuantityOfItems)
+                    .IsRequired()
+                    .HasColumnName("QuantityOfItems");
+
+                    entity.Property(i => i.UnitValue)
+                    .IsRequired()
+                    .HasColumnName("UnitValue");
+
+                    entity.Property(i => i.TotalValue)
+                    .IsRequired()
+                    .HasColumnName("TotalValue");
+
+                    entity.HasOne(o => o.Order)
+                    .WithMany(i => i.Items)
+                    .HasForeignKey(o => o.OrderId);
+
+                    entity.Ignore(p => p.IsValid);
+                    entity.Ignore(p => p.ErrorMessageIfIsNotValid);
+                }
+            );
         }
     }
 }
