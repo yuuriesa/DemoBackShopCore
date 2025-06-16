@@ -22,7 +22,7 @@ namespace DemoBackShopCore.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Customer>(entity => 
+            modelBuilder.Entity<Customer>(entity =>
             {
                 entity.HasKey(c => c.CustomerId);
 
@@ -57,10 +57,15 @@ namespace DemoBackShopCore.Data
                 .HasForeignKey(c => c.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasMany(c => c.Orders)
+                .WithOne(o => o.Customer)
+                .HasForeignKey(c => c.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
                 entity.Ignore(c => c.ErrorMessageIfIsNotValid);
             });
 
-            modelBuilder.Entity<Address>(entity => 
+            modelBuilder.Entity<Address>(entity =>
                 {
                     entity.HasKey(a => a.AddressId);
 
@@ -125,6 +130,66 @@ namespace DemoBackShopCore.Data
                     .IsRequired()
                     .HasMaxLength(40)
                     .HasColumnName("Name");
+
+                    entity.Ignore(p => p.IsValid);
+                    entity.Ignore(p => p.ErrorMessageIfIsNotValid);
+                }
+            );
+
+            modelBuilder.Entity<Order>(entity =>
+                {
+                    entity.HasKey(o => o.OrderId);
+
+                    entity.Property(o => o.OrderNumber)
+                    .IsRequired()
+                    .HasColumnName("OrderNumber");
+
+                    entity.HasIndex(o => o.OrderNumber)
+                    .IsUnique();
+
+                    entity.Property(o => o.OrderDate)
+                    .IsRequired()
+                    .HasColumnName("OrderDate")
+                    .HasField("_orderDate")
+                    .HasDefaultValue(DateOnly.FromDateTime(dateTime: DateTime.Now));
+
+                    entity.Property(o => o.TotalOrderValue)
+                    .IsRequired()
+                    .HasColumnName("TotalOrderValue");
+
+                    entity.HasOne(a => a.Customer)
+                    .WithMany(c => c.Orders)
+                    .HasForeignKey(c => c.CustomerId);
+
+                    entity.HasMany(i => i.Items)
+                    .WithOne(o => o.Order)
+                    .HasForeignKey("OrderId")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                    entity.Ignore(p => p.IsValid);
+                    entity.Ignore(p => p.ErrorMessageIfIsNotValid);
+                }
+            );
+
+            modelBuilder.Entity<Item>(entity =>
+                {
+                    entity.HasKey(i => i.ItemId);
+
+                    entity.Property(i => i.QuantityOfItems)
+                    .IsRequired()
+                    .HasColumnName("QuantityOfItems");
+
+                    entity.Property(i => i.UnitValue)
+                    .IsRequired()
+                    .HasColumnName("UnitValue");
+
+                    entity.Property(i => i.TotalValue)
+                    .IsRequired()
+                    .HasColumnName("TotalValue");
+
+                    entity.HasOne(o => o.Order)
+                    .WithMany(i => i.Items)
+                    .HasForeignKey(o => o.OrderId);
 
                     entity.Ignore(p => p.IsValid);
                     entity.Ignore(p => p.ErrorMessageIfIsNotValid);
