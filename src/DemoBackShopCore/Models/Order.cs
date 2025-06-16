@@ -9,14 +9,14 @@ namespace DemoBackShopCore.Models
         private string _orderNumber { get; set; }
         private DateTime _orderDate { get; set; }
         private decimal _totalOrderValue { get; set; }
-        private int _customerId { get; set; }
+        //private int _customerId { get; set; }
 
         //public properties
         public int OrderId { get; private set; }
         public string OrderNumber => _orderNumber;
         public DateTime OrderDate => _orderDate;
         public decimal TotalOrderValue => _totalOrderValue;
-        public int CustomerId => _customerId;
+        public int CustomerId { get; private set; }
         [JsonIgnore]
         public Customer Customer { get; set; }
         public ICollection<Item> Items { get; private set; } = new List<Item>();
@@ -44,7 +44,8 @@ namespace DemoBackShopCore.Models
             _orderNumber = orderNumber;
             _orderDate = orderDate;
             _totalOrderValue = totalOrderValue;
-            _customerId = customerId;
+            //_customerId = customerId;
+            CustomerId = customerId;
             Items = items;
 
             Validate();
@@ -132,7 +133,8 @@ namespace DemoBackShopCore.Models
                 ErrorMessageIfIsNotValid = DomainResponseMessages.CustomerCustomerIdMustBeGreaterThanZeroError;
             }
 
-            _customerId = customerId;
+            //_customerId = customerId;
+            CustomerId = customerId;
         }
         private void SetTotalOrderValue(List<Item> items)
         {
@@ -151,7 +153,7 @@ namespace DemoBackShopCore.Models
         private void Validate()
         {
             DateTime dateNow = DateTime.UtcNow;
-            IsValid = _orderNumber.Length > 1 && _orderDate.ToUniversalTime().Date <= dateNow.Date && _totalOrderValue > 0 && _customerId > 0 && Items.Count > 0;
+            IsValid = _orderNumber.Length > 1 && _orderDate.ToUniversalTime().Date <= dateNow.Date && _totalOrderValue > 0 && CustomerId > 0 && Items.Count > 0;
         }
     }
 }
