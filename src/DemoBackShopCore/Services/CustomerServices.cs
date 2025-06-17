@@ -268,12 +268,9 @@ namespace DemoBackShopCore.Services
                 newAddresses.Add(item: newAddress);
             }
 
-            _dbContext.Addresses.RemoveRange(entities: customerExists.Addresses);
-            _dbContext.SaveChanges();
-
             Customer updatedCustomer = Customer.SetExistingInfo
             (
-                customerId: customerExists.CustomerId,
+                customerId: id,
                 firstName: customerRequestDTO.FirstName,
                 lastName: customerRequestDTO.LastName,
                 emailAddress: customerRequestDTO.EmailAddress,
@@ -290,6 +287,8 @@ namespace DemoBackShopCore.Services
                 );
             }
 
+            _dbContext.Addresses.RemoveRange(entities: customerExists.Addresses);
+            _dbContext.SaveChanges();
             _repository.Update(id: id, entity: updatedCustomer);
 
             return ServiceResult<Customer>.SuccessResult(data: updatedCustomer);
