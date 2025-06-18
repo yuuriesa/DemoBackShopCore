@@ -1,3 +1,4 @@
+using DemoBackShopCore.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoBackShopCore.Controllers
@@ -6,6 +7,14 @@ namespace DemoBackShopCore.Controllers
     [Route("api/Orders")]
     public class OrdersController : ControllerBase
     {
-        
+        private readonly ApplicationDbContext _dbContext;
+
+        public OrdersController
+        (
+            ApplicationDbContext dbContext
+        )
+        {
+            _dbContext = dbContext;
+        }
     }
 }
