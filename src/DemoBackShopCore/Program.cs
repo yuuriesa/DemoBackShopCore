@@ -16,7 +16,13 @@ builder.Services.AddScoped<ICustomerServices, CustomerServices>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderServices, OrderServices>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IRepositoryBase<Customer>, RepositoryBase<Customer>>();
+builder.Services.AddScoped<IRepositoryBase<Address>, RepositoryBase<Address>>();
+builder.Services.AddScoped<IRepositoryBase<Product>, RepositoryBase<Product>>();
+builder.Services.AddScoped<IRepositoryBase<Order>, RepositoryBase<Order>>();
+builder.Services.AddScoped<IRepositoryBase<Item>, RepositoryBase<Item>>();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
     {
         options.InvalidModelStateResponseFactory = context =>
