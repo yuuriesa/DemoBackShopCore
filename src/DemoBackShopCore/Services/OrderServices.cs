@@ -23,7 +23,7 @@ namespace DemoBackShopCore.Services
 
         public IQueryable<Order> GetAll(PaginationFilter paginationFilter)
         {
-            throw new NotImplementedException();
+            return _repository.GetAll(paginationFilter: paginationFilter);
         }
     }
 }
