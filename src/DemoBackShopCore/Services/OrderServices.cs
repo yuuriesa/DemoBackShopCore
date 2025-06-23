@@ -1,5 +1,7 @@
 using DemoBackShopCore.Data;
+using DemoBackShopCore.Models;
 using DemoBackShopCore.Repository;
+using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.Services
 {
@@ -17,6 +19,11 @@ namespace DemoBackShopCore.Services
             _dbContext = dbContext;
             _repository = repository;
 
+        }
+
+        public IQueryable<Order> GetAll(PaginationFilter paginationFilter)
+        {
+            return _repository.GetAll(paginationFilter: paginationFilter);
         }
     }
 }
