@@ -1,4 +1,5 @@
 using DemoBackShopCore.Data;
+using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
 using DemoBackShopCore.Utils;
@@ -38,7 +39,7 @@ namespace DemoBackShopCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add()
+        public IActionResult Add(OrderRequestDTO orderRequestDTO)
         {
             return Ok();
         }
