@@ -36,5 +36,11 @@ namespace DemoBackShopCore.Controllers
 
             return Ok(orders);
         }
+
+        [HttpPost]
+        public IActionResult Add()
+        {
+            return Ok();
+        }
     }
 }
