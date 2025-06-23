@@ -1,4 +1,5 @@
 using DemoBackShopCore.Data;
+using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Services;
 using DemoBackShopCore.Utils;
@@ -35,6 +36,12 @@ namespace DemoBackShopCore.Controllers
             if (orders.Count() == 0) return NoContent();
 
             return Ok(orders);
+        }
+
+        [HttpPost]
+        public IActionResult Add(OrderRequestDTO orderRequestDTO)
+        {
+            return Ok();
         }
     }
 }
