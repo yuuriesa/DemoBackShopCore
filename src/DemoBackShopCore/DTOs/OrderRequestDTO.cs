@@ -8,7 +8,7 @@ namespace DemoBackShopCore.DTOs
         public string OrderNumber { get; set; }
         [DataType(DataType.Date)]
         public DateTime OrderDate { get; set; }
-        public CustomerRequestDTO Customer { get; set; }
+        public CustomerRequestDTOForOrder Customer { get; set; }
         public List<ItemRequestDTO> Items { get; set; } = new List<ItemRequestDTO>();
     }
 }
