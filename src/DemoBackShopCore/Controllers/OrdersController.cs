@@ -41,7 +41,14 @@ namespace DemoBackShopCore.Controllers
         [HttpPost]
         public IActionResult Add(OrderRequestDTO orderRequestDTO)
         {
-            return Ok();
+            ServiceResult<Order> result = _services.Add(orderRequestDTO: orderRequestDTO);
+
+            if (!result.Success)
+            {
+                return StatusCode(statusCode: result.StatusCode, value: result.Message);
+            }
+
+            return Created("", result);
         }
     }
 }
