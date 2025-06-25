@@ -48,6 +48,8 @@ namespace DemoBackShopCore.Controllers
                 return StatusCode(statusCode: result.StatusCode, value: result.Message);
             }
 
+            _dbContext.SaveChanges();
+
             return Created("", result);
         }
     }

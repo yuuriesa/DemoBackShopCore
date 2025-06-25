@@ -52,7 +52,7 @@ namespace DemoBackShopCore.Models
         }
 
         //public methods
-        public Order RegisterNew
+        public static Order RegisterNew
         (
             string orderNumber,
             DateTime orderDate,
@@ -72,7 +72,7 @@ namespace DemoBackShopCore.Models
             return order;
         }
 
-        public Order SetExistingInfo
+        public static Order SetExistingInfo
         (
             int orderId,
             string orderNumber,
