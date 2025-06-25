@@ -1,4 +1,5 @@
 using DemoBackShopCore.Data;
+using DemoBackShopCore.DTOs;
 using DemoBackShopCore.Models;
 using DemoBackShopCore.Repository;
 using DemoBackShopCore.Utils;
@@ -19,6 +20,11 @@ namespace DemoBackShopCore.Services
             _dbContext = dbContext;
             _repository = repository;
 
+        }
+
+        public ServiceResult<Order> Add(OrderRequestDTO orderRequestDTO)
+        {
+            throw new NotImplementedException();
         }
 
         public IQueryable<Order> GetAll(PaginationFilter paginationFilter)
