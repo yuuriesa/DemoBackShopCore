@@ -38,6 +38,20 @@ namespace DemoBackShopCore.Controllers
             return Ok(orders);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            Order order = _services.GetById(id: id);
+
+            if (order == null)
+            {
+                return NotFound(DomainResponseMessages.OrderNotFoundMessageError);
+            }
+
+            return Ok(order);
+        }
+
+
         [HttpPost]
         public IActionResult Add(OrderRequestDTO orderRequestDTO)
         {
