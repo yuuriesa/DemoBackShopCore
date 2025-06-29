@@ -104,5 +104,19 @@ namespace DemoBackShopCore.Services
         {
             return _repository.GetAll(paginationFilter: paginationFilter);
         }
+
+        public Order GetById(int id)
+        {
+            Order findOrder = _repository.GetById(id: id);
+
+            Order order = _dbContext.Orders.Where(o => o.OrderId == id).Include(o => o.Items).First();
+
+            if (findOrder == null)
+            {
+                return null!;
+            }
+
+            return order;
+        }
     }
 }
