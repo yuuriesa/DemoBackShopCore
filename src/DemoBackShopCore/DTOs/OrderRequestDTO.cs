@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using DemoBackShopCore.Models;
+using DemoBackShopCore.Utils;
 
 namespace DemoBackShopCore.DTOs
 {
     public class OrderRequestDTO
     {
-        [Required]
+        [Required(ErrorMessage = DomainResponseMessages.OrderNumberIsRequired)]
         public string OrderNumber { get; set; }
         [Required]
         [DataType(DataType.Date)]
