@@ -44,8 +44,19 @@ namespace DemoBackShopCore.Services
             {
                 return ServiceResult<Order>.ErrorResult(message: DomainResponseMessages.CustomerNotFoundMessageError, statusCode: 404);
             }
-            
-            List<Item> items = new List<Item>();
+
+            if
+            (
+                customer.FirstName != orderRequestDTO.Customer.FirstName
+                || customer.LastName != orderRequestDTO.Customer.LastName
+                || customer.DateOfBirth.ToDateTime(TimeOnly.MinValue).Date != orderRequestDTO.Customer.DateOfBirth.Date
+            )
+            {
+                return ServiceResult<Order>.ErrorResult(message: DomainResponseMessages.CustomerOrderFieldsAreInvalidError, statusCode: 422); 
+            }
+
+
+                List<Item> items = new List<Item>();
 
             foreach (var item in orderRequestDTO.Items)
             {
