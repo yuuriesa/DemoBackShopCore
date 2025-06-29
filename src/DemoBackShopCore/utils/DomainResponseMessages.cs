@@ -42,5 +42,6 @@ namespace DemoBackShopCore.Utils
         public const string TheOrderMustHaveAtLeastOneItem = "The order must have at least one item";
         public const string TheUnitValueMustBeGreaterThanZero = "The unit value must be greater than zero.";
         public const string TheQuantityOfItensMustBeGreaterThanZero = "The quantity of itens must be greater than zero.";
+        public const string CustomerOrderFieldsAreInvalidError = "FirstName or LastName or OrderDate fields are invalid, check the values available.";
     }
 }
