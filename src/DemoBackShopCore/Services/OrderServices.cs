@@ -100,6 +100,11 @@ namespace DemoBackShopCore.Services
             return ServiceResult<Order>.SuccessResult(data: newOrder, 201);
         }
 
+        public OrderResponseDTO GenerateOrderResponseDTO(Order order)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQueryable<Order> GetAll(PaginationFilter paginationFilter)
         {
             return _repository.GetAll(paginationFilter: paginationFilter);
