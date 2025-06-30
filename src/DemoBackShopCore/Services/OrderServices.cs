@@ -146,7 +146,13 @@ namespace DemoBackShopCore.Services
 
         public IQueryable<Order> GetAll(PaginationFilter paginationFilter)
         {
-            return _repository.GetAll(paginationFilter: paginationFilter);
+            return _dbContext.Orders
+                    .AsNoTracking()
+                    .Include(o => o.Items)
+                    .Include(o => o.Customer)
+                    .OrderBy(o => o.OrderId)
+                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                    .Take(paginationFilter.PageSize);
         }
 
         public Order GetById(int id)
