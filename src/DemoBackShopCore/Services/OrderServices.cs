@@ -107,7 +107,7 @@ namespace DemoBackShopCore.Services
 
         public OrderResponseDTO GenerateOrderResponseDTO(Order order)
         {
-            Customer? customer = _customerRepository.GetById(id: order.CustomerId);
+            Customer? customer = _dbContext.Customers.AsNoTracking().Where(c => c.CustomerId == order.CustomerId).Include(c => c.Addresses).FirstOrDefault();
 
             CustomerResponseDTO customerResponseDTO = _customerServices.GenerateCustomerResponseDTO(customer: customer);
 
