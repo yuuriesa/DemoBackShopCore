@@ -107,14 +107,15 @@ namespace DemoBackShopCore.Services
 
         public Order GetById(int id)
         {
-            Order findOrder = _repository.GetById(id: id);
-
-            Order order = _dbContext.Orders.Where(o => o.OrderId == id).Include(o => o.Items).First();
-
+            Order? findOrder = _dbContext.Orders.AsNoTracking().FirstOrDefault(o => o.OrderId == id);
+            
             if (findOrder == null)
             {
                 return null!;
             }
+
+            Order? order = _dbContext.Orders.Where(o => o.OrderId == id).Include(o => o.Items).First();
+
 
             return order;
         }
