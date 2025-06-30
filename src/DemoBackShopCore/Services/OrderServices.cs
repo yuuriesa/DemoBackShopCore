@@ -11,7 +11,9 @@ namespace DemoBackShopCore.Services
     {
         private readonly IOrderRepository _repository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerServices _customerServices;
         private readonly IProductRepository _productRepository;
+        private readonly IProductServices _productServices;
         private readonly ApplicationDbContext _dbContext;
 
         public OrderServices
@@ -19,14 +21,17 @@ namespace DemoBackShopCore.Services
             ApplicationDbContext dbContext,
             IOrderRepository repository,
             ICustomerRepository customerRepository,
-            IProductRepository productRepository
+            IProductRepository productRepository,
+            ICustomerServices customerServices,
+            IProductServices productServices
         )
         {
             _dbContext = dbContext;
             _repository = repository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
-
+            _customerServices = customerServices;
+            _productServices = productServices;
         }
 
         public ServiceResult<Order> Add(OrderRequestDTO orderRequestDTO)
@@ -102,7 +107,41 @@ namespace DemoBackShopCore.Services
 
         public OrderResponseDTO GenerateOrderResponseDTO(Order order)
         {
-            throw new NotImplementedException();
+            Customer? customer = _customerRepository.GetById(id: order.CustomerId);
+
+            CustomerResponseDTO customerResponseDTO = _customerServices.GenerateCustomerResponseDTO(customer: customer);
+
+            List<ItemResponseDTO> items = new List<ItemResponseDTO>();
+
+            foreach (var item in order.Items)
+            {
+                Product? product = _productServices.GetById(id: item.ProductId);
+
+                ProductResponseDTO productResponseDTO = _productServices.GenerateProductResponseDTO(product: product);
+
+                ItemResponseDTO itemResponseDTO = new ItemResponseDTO
+                {
+                    itemId = item.ItemId,
+                    orderId = item.OrderId,
+                    quantityOfItems = item.QuantityOfItems,
+                    unitValue = item.UnitValue,
+                    product = productResponseDTO
+                };
+
+                items.Add(item: itemResponseDTO);
+            }
+
+            OrderResponseDTO orderResponseDTO = new OrderResponseDTO
+            {
+                orderId = order.OrderId,
+                orderNumber = order.OrderNumber,
+                orderDate = order.OrderDate.ToString("yyyy-MM-dd"),
+                totalOrderValue = order.TotalOrderValue,
+                customer = customerResponseDTO,
+                items = items
+            };
+
+            return orderResponseDTO;
         }
 
         public IQueryable<Order> GetAll(PaginationFilter paginationFilter)
