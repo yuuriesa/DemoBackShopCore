@@ -52,16 +52,15 @@ namespace DemoBackShopCore.Services
 
             if
             (
-                customer.FirstName != orderRequestDTO.Customer.FirstName
-                || customer.LastName != orderRequestDTO.Customer.LastName
+                customer.FirstName.ToLower()  != orderRequestDTO.Customer.FirstName.ToLower() 
+                || customer.LastName.ToLower()  != orderRequestDTO.Customer.LastName.ToLower()
                 || customer.DateOfBirth.ToDateTime(TimeOnly.MinValue).Date != orderRequestDTO.Customer.DateOfBirth.Date
             )
             {
                 return ServiceResult<Order>.ErrorResult(message: DomainResponseMessages.CustomerOrderFieldsAreInvalidError, statusCode: 422); 
             }
 
-
-                List<Item> items = new List<Item>();
+            List<Item> items = new List<Item>();
 
             foreach (var item in orderRequestDTO.Items)
             {
@@ -72,6 +71,19 @@ namespace DemoBackShopCore.Services
                     return ServiceResult<Order>.ErrorResult
                     (
                         message: $"{DomainResponseMessages.ProductNotFoundMessageError}: Code:{item.Product.Code}", statusCode: 404
+                    );
+                }
+
+                if
+                (
+                    productExists.Code.ToLower() != item.Product.Code.ToLower()
+                    ||
+                    productExists.Name.ToLower() != item.Product.Name.ToLower()
+                )
+                {
+                    return ServiceResult<Order>.ErrorResult
+                    (
+                        message: $"{DomainResponseMessages.ProductFieldsAreInvalidError}: Code:{item.Product.Code}", statusCode: 422
                     );
                 }
 
