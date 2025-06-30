@@ -35,7 +35,15 @@ namespace DemoBackShopCore.Controllers
 
             if (orders.Count() == 0) return NoContent();
 
-            return Ok(orders);
+            List<OrderResponseDTO> orderResponseDTOs = new List<OrderResponseDTO>();
+
+            foreach (var order in orders)
+            {
+                OrderResponseDTO orderResponseDTO = _services.GenerateOrderResponseDTO(order: order);
+                orderResponseDTOs.Add(orderResponseDTO);
+            }
+
+            return Ok(orderResponseDTOs);
         }
 
         [HttpGet("{id}")]
