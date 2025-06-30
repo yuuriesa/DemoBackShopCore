@@ -74,7 +74,9 @@ namespace DemoBackShopCore.Controllers
 
             _dbContext.SaveChanges();
 
-            return Created("", result);
+            OrderResponseDTO orderResponseDTO = _services.GenerateOrderResponseDTO(order: result.Data);
+
+            return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = orderResponseDTO.orderId }, value: orderResponseDTO);
         }
     }
 }
