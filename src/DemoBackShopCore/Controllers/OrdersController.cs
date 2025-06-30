@@ -48,7 +48,9 @@ namespace DemoBackShopCore.Controllers
                 return NotFound(DomainResponseMessages.OrderNotFoundMessageError);
             }
 
-            return Ok(order);
+            OrderResponseDTO orderResponseDTO = _services.GenerateOrderResponseDTO(order: order);
+
+            return Ok(orderResponseDTO);
         }
 
 
