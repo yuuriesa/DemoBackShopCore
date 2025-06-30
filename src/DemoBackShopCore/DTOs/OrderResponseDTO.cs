@@ -7,6 +7,6 @@ namespace DemoBackShopCore.DTOs
         public DateTime orderDate { get; set; }
         public decimal totalOrderValue { get; set; }
         public CustomerResponseDTO customer { get; set; }
-        List<ItemResponseDTO> items { get; set; } = new List<ItemResponseDTO>();
+        public List<ItemResponseDTO> items { get; set; } = new List<ItemResponseDTO>();
     }
 }
