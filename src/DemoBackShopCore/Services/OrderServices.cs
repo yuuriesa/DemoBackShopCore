@@ -181,5 +181,92 @@ namespace DemoBackShopCore.Services
 
             return order;
         }
+
+        public ServiceResult<Order> Update(int id, OrderRequestDTO orderRequestDTO)
+        {
+            Order? order = _dbContext.Orders.AsNoTracking().Where(o => o.OrderId == id).Include(o => o.Items).FirstOrDefault();
+
+            if (order == null)
+            {
+                return ServiceResult<Order>
+                .ErrorResult
+                (
+                    message: DomainResponseMessages.OrderNotFoundMessageError,
+                    statusCode: 404
+                );
+            }
+
+            Customer? customer = _customerServices.GetCustomerByEmail(emailAddress: orderRequestDTO.Customer.EmailAddress);
+
+            if (customer == null)
+            {
+                return ServiceResult<Order>.ErrorResult(message: DomainResponseMessages.CustomerNotFoundMessageError, statusCode: 404);
+            }
+
+            if
+            (
+                customer.FirstName.ToLower() != orderRequestDTO.Customer.FirstName.ToLower()
+                || customer.LastName.ToLower() != orderRequestDTO.Customer.LastName.ToLower()
+                || customer.DateOfBirth.ToDateTime(TimeOnly.MinValue).Date != orderRequestDTO.Customer.DateOfBirth.Date
+            )
+            {
+                return ServiceResult<Order>.ErrorResult(message: DomainResponseMessages.CustomerOrderFieldsAreInvalidError, statusCode: 422);
+            }
+
+            List<Item> items = new List<Item>();
+
+            foreach (var item in orderRequestDTO.Items)
+            {
+                Product? productExists = _productRepository.GetByCode(code: item.Product.Code);
+
+                if (productExists == null)
+                {
+                    return ServiceResult<Order>.ErrorResult
+                    (
+                        message: $"{DomainResponseMessages.ProductNotFoundMessageError}: Code:{item.Product.Code}", statusCode: 404
+                    );
+                }
+
+                if
+                (
+                    productExists.Code.ToLower() != item.Product.Code.ToLower()
+                    ||
+                    productExists.Name.ToLower() != item.Product.Name.ToLower()
+                )
+                {
+                    return ServiceResult<Order>.ErrorResult
+                    (
+                        message: $"{DomainResponseMessages.ProductFieldsAreInvalidError}: Code:{item.Product.Code}", statusCode: 422
+                    );
+                }
+
+                Item newItem = Item.RegisterNew(product: productExists!, unitValue: item.UnitValue, quantityOfItems: item.QuantityOfItems);
+
+                if (!newItem.IsValid)
+                {
+                    return ServiceResult<Order>.ErrorResult(message: newItem.ErrorMessageIfIsNotValid, statusCode: 422);
+                }
+
+                items.Add(item: newItem);
+            }
+            
+            Order updatedOrder = Order.RegisterNew
+            (
+                orderNumber: orderRequestDTO.OrderNumber,
+                orderDate: orderRequestDTO.OrderDate,
+                customerId: customer.CustomerId,
+                items: items
+            );
+
+            if (!updatedOrder.IsValid)
+            {
+                return ServiceResult<Order>.ErrorResult(message: updatedOrder.ErrorMessageIfIsNotValid, statusCode: 422);
+            }
+
+            _repository.Update(id: id, entity: updatedOrder);
+
+
+            return ServiceResult<Order>.SuccessResult(data: updatedOrder);
+        }
     }
 }
