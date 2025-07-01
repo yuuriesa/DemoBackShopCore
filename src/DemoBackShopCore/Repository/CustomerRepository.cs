@@ -1,5 +1,6 @@
 using DemoBackShopCore.Data;
 using DemoBackShopCore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBackShopCore.Repository
 {
@@ -13,7 +14,7 @@ namespace DemoBackShopCore.Repository
 
         public Customer GetCustomerByEmail(string emailAddress)
         {
-            Customer customer = _dbContext.Customers.FirstOrDefault(c => c.EmailAddress == emailAddress);
+            Customer customer = _dbContext.Customers.AsNoTracking().Where(c => c.EmailAddress == emailAddress).Include(c => c.Addresses).FirstOrDefault();
 
             if (customer == null)
             {
