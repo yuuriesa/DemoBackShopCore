@@ -39,6 +39,7 @@ namespace DemoBackShopCore.Utils
         public const string OrderNumberIsRequired = "OrderNumber Is Required";
         public const string OrderNotFoundMessageError = "Order Not Found";
         public const string OrderNumberExistsError = "this OrderNumber exists";
+        public const string OrderNumberNotExistsError = "this OrderNumber not exists";
         public const string DateOfOrderError = "You cannot put the date with the day after today.";
         public const string TheOrderMustHaveAtLeastOneItem = "The order must have at least one item";
         public const string TheUnitValueMustBeGreaterThanZero = "The unit value must be greater than zero.";
