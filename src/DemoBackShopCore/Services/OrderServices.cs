@@ -181,5 +181,10 @@ namespace DemoBackShopCore.Services
 
             return order;
         }
+
+        public Order Update(int id, OrderRequestDTO orderRequestDTO)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
