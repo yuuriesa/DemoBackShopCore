@@ -78,5 +78,11 @@ namespace DemoBackShopCore.Controllers
 
             return CreatedAtAction(actionName: nameof(GetById), routeValues: new { id = orderResponseDTO.orderId }, value: orderResponseDTO);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, OrderRequestDTO orderRequestDTO)
+        {
+            return Ok();
+        }
     }
 }
