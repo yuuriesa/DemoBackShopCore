@@ -9,7 +9,7 @@ namespace DemoBackShopCore.Services
         public IQueryable<Order> GetAll(PaginationFilter paginationFilter);
         public Order GetById(int id);
         public ServiceResult<Order> Add(OrderRequestDTO orderRequestDTO);
-        public Order Update(int id, OrderRequestDTO orderRequestDTO);
+        public ServiceResult<Order> Update(int id, OrderRequestDTO orderRequestDTO);
         public OrderResponseDTO GenerateOrderResponseDTO(Order order);
     }
 }
