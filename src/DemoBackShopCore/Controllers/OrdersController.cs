@@ -82,7 +82,6 @@ namespace DemoBackShopCore.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, OrderRequestDTO orderRequestDTO)
         {
-            //O método ainda não ta completo, está criando um novo invés de atualizar o mesmo, concertar dps.
             ServiceResult<Order> result = _services.Update(id: id, orderRequestDTO: orderRequestDTO);
 
             if (!result.Success)
