@@ -182,6 +182,26 @@ namespace DemoBackShopCore.Services
             return order;
         }
 
+        public ServiceResult<Order> Remove(int id)
+        {
+            Order? order = _dbContext.Orders.AsNoTracking().Where(o => o.OrderId == id).Include(o => o.Items).FirstOrDefault();
+
+            if (order == null)
+            {
+                return ServiceResult<Order>
+                .ErrorResult
+                (
+                    message: DomainResponseMessages.OrderNotFoundMessageError,
+                    statusCode: 404
+                );
+            }
+
+            _dbContext.Items.RemoveRange(entities: order.Items);
+            _repository.Remove(id: id);
+
+            return ServiceResult<Order>.SuccessResult(data: order);
+        }
+
         public ServiceResult<Order> Update(int id, OrderRequestDTO orderRequestDTO)
         {
             Order? order = _dbContext.Orders.AsNoTracking().Where(o => o.OrderId == id).Include(o => o.Items).FirstOrDefault();
