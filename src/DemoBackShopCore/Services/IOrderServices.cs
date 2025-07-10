@@ -10,6 +10,7 @@ namespace DemoBackShopCore.Services
         public Order GetById(int id);
         public ServiceResult<Order> Add(OrderRequestDTO orderRequestDTO);
         public ServiceResult<Order> Update(int id, OrderRequestDTO orderRequestDTO);
+        public ServiceResult<Order> Remove(int id);
         public OrderResponseDTO GenerateOrderResponseDTO(Order order);
     }
 }
