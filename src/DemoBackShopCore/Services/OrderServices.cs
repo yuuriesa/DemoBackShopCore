@@ -194,7 +194,7 @@ namespace DemoBackShopCore.Services
                     message: DomainResponseMessages.OrderNotFoundMessageError,
                     statusCode: 404
                 );
-            }
+            }         
 
             Customer? customer = _customerServices.GetCustomerByEmail(emailAddress: orderRequestDTO.Customer.EmailAddress);
 
@@ -249,12 +249,22 @@ namespace DemoBackShopCore.Services
 
                 items.Add(item: newItem);
             }
-            
-            Order updatedOrder = Order.RegisterNew
+    
+            Order newOrderforUpdated = Order.RegisterNew
             (
                 orderNumber: orderRequestDTO.OrderNumber,
                 orderDate: orderRequestDTO.OrderDate,
                 customerId: customer.CustomerId,
+                items: items
+            );
+
+            Order updatedOrder = Order.SetExistingInfo
+            (
+                orderId: id,
+                orderNumber: newOrderforUpdated.OrderNumber,
+                orderDate: newOrderforUpdated.OrderDate,
+                totalOrderValue: newOrderforUpdated.TotalOrderValue,
+                customerId: newOrderforUpdated.CustomerId,
                 items: items
             );
 
@@ -263,8 +273,17 @@ namespace DemoBackShopCore.Services
                 return ServiceResult<Order>.ErrorResult(message: updatedOrder.ErrorMessageIfIsNotValid, statusCode: 422);
             }
 
-            _repository.Update(id: id, entity: updatedOrder);
+            _dbContext.Items.RemoveRange(entities: order.Items);
+            // _dbContext.SaveChanges();
 
+            // Remover explicitamente qualquer rastreamento da Order antiga, por segurança
+            var localOrder = _dbContext.Orders.Local.FirstOrDefault(o => o.OrderId == order.OrderId);
+            if (localOrder != null)
+            {
+                _dbContext.Entry(localOrder).State = EntityState.Detached;
+            }
+
+            _repository.Update(id: id, entity: updatedOrder);
 
             return ServiceResult<Order>.SuccessResult(data: updatedOrder);
         }
